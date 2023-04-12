@@ -4,6 +4,8 @@
 
 #include <valarray>
 #include <span>
+#include <initializer_list>
+
 
 class ARX : public SISO
 {

@@ -7,7 +7,7 @@
 
 
 
-ARX::ARX(std::span<double> A, std::span<double> B, unsigned dly, double ns) : k(dly), noiseamp(ns)
+ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsigned dly, double ns) : k(dly), noiseamp(ns)
 {
 	setNum(B);
 	setDen(A);
