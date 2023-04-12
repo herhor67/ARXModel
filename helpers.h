@@ -3,14 +3,15 @@
 #include "settings.h"
 
 #include <valarray>
-#include <span>
+
+#include <iostream>
 
 template <typename T>
-std::valarray<T> span_to_valarray(const std::span<T>& sp)
+std::ostream& operator<<(std::ostream& o, const std::valarray<T>& va)
 {
-	std::valarray<T> temp(sp.size());
-	for (size_t i = 0; i < sp.size(); ++i)
-		temp[i] = sp[i];
-	
-	return temp;
+	o << '(';
+	for (const T& v : va)
+		o << v << ',';
+	o << ')';
+	return o;
 }

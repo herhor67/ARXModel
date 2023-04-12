@@ -3,8 +3,8 @@
 class SISO
 {
 public:
-	SISO();
-	virtual ~SISO() = 0;
+	SISO() = default;
+	virtual ~SISO() = default;
 	
 	virtual double iteration(double) = 0;
 

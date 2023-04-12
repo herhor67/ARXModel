@@ -1,10 +1,10 @@
 
 #include "ARX.h"
 
-#include <iostream>
+
+#include "settings.h"
+
 #include <iomanip>
-using std::cout;
-using std::endl;
 
 #include <vector>
 
@@ -190,6 +190,8 @@ int main()
 	test_ARX_skokJednostkowy_1();
 	test_ARX_skokJednostkowy_2();
 	test_ARX_skokJednostkowy_3();
+
+	system("PAUSE");
 }
 
 #else

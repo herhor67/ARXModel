@@ -1,9 +1,14 @@
 #include "ARX.h"
 
+#include "settings.h"
+
 #include "helpers.h"
+
 
 //#include <exception>
 #include <stdexcept>
+
+
 
 
 
@@ -11,6 +16,7 @@ ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsig
 {
 	setNum(B);
 	setDen(A);
+	k = 0;
 }
 
 ARX::~ARX()
@@ -18,28 +24,58 @@ ARX::~ARX()
 
 
 
-double ARX::iteration(double)
+double ARX::iteration(double in)
 {
-	return 1;
+	cout << inBuf;
+	inBuf = inBuf.shift(1);
+	if (inBuf.size())
+		inBuf[inBuf.size() - 1] = in;
+	cout << inBuf << '\t';
+
+
+	double out = (B * static_cast<DS>(inBuf[std::slice(0, B.size(), 1)])).sum() - (A * outBuf).sum() + noiseamp * getNoise();
+
+
+	cout << outBuf;
+	outBuf = outBuf.shift(1);
+	if (outBuf.size())
+		outBuf[outBuf.size() - 1] = out;
+	cout << outBuf << endl;
+
+	return out;
 }
 
 
 
-void ARX::setNum(std::span<double> n)
+void ARX::setNum(std::initializer_list<double> n)
 {
-	//B.assign(n.begin(), n.end());
-	B = span_to_valarray(n);
+	B = n;
+
+	inBuf.resize(B.size() + k);
 }
 
-void ARX::setDen(std::span<double> d)
+void ARX::setDen(std::initializer_list<double> d)
 {
-	if (d.size() == 0)
-		throw std::invalid_argument("Denominator (A) must be of length at least one!");
+	//if (d.size() == 0)
+	//	throw std::invalid_argument("Denominator (A) must be of length at least one!");
 
-	//A.assign(d.begin(), d.end());
-	A = span_to_valarray(d);
+	A = d;
 	
-	if (A[0] != 1)
-		A /= A[0];
+	//if (A[0] != 1)
+	//	A /= A[0];
 
+	outBuf.resize(A.size());
 }
+
+void ARX::setup()
+{
+	
+}
+
+// static S.H.I.T.
+
+double ARX::getNoise()
+{
+	return 0;
+}
+

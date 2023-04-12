@@ -9,10 +9,16 @@
 
 class ARX : public SISO
 {
-	std::valarray<double> A; // den
-	std::valarray<double> B; // num
+	using DS = std::valarray<double>;
+
+	DS A; // den
+	DS B; // num
 	unsigned k = 0;
 	double noiseamp = 1;
+
+	DS inBuf;
+	DS outBuf;
+
 
 public:
 	ARX(std::initializer_list<double>, std::initializer_list<double>, unsigned = 0, double = 0);
@@ -20,9 +26,13 @@ public:
 
 	double iteration(double);
 
-	void setNum(std::span<double>);
+	void setNum(std::initializer_list<double>);
 
-	void setDen(std::span<double>);
+	void setDen(std::initializer_list<double>);
+
+	void setup();
+
+	static double getNoise();
 
 };
 
