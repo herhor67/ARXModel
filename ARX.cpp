@@ -16,7 +16,6 @@ ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsig
 {
 	setNum(B);
 	setDen(A);
-	k = 0;
 }
 
 ARX::~ARX()
@@ -26,21 +25,20 @@ ARX::~ARX()
 
 double ARX::iteration(double in)
 {
-	cout << inBuf;
-	inBuf = inBuf.shift(1);
+	inBuf = inBuf.shift(-1);
 	if (inBuf.size())
-		inBuf[inBuf.size() - 1] = in;
-	cout << inBuf << '\t';
+		inBuf[0] = in;
 
+	DS temp = inBuf[std::slice(k, B.size(), 1)];
 
-	double out = (B * static_cast<DS>(inBuf[std::slice(0, B.size(), 1)])).sum() - (A * outBuf).sum() + noiseamp * getNoise();
+	double NUMxIN = (B * temp).sum() ;
+	double DENxOUT = (A * outBuf).sum();
 
+	double out = NUMxIN - DENxOUT + noiseamp * getNoise();
 
-	cout << outBuf;
-	outBuf = outBuf.shift(1);
+	outBuf = outBuf.shift(-1);
 	if (outBuf.size())
-		outBuf[outBuf.size() - 1] = out;
-	cout << outBuf << endl;
+		outBuf[0] = out;
 
 	return out;
 }
