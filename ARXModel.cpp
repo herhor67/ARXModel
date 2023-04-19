@@ -206,7 +206,9 @@ int main()
 
 	Simulation sim(arx, pid);
 
-	sim.save("save.txt");
+	sim.save("save.json");
+
+	system("PAUSE");
 }
 
 

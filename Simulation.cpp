@@ -14,12 +14,11 @@ Simulation::Simulation() {}
 
 void Simulation::save(std::string file)
 {
-	std::ofstream out;
-	out.open(file);
-
 	json j;
-
 	j["ARX"] = arx;
 	j["PID"] = pid;
+
+	std::ofstream out(file);
+	out << j;
 
 }

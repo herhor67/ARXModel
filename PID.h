@@ -2,22 +2,26 @@
 
 #include "SISO.h"
 
+#include "json.hpp"
+
 class PID : public SISO
 {
 	friend class Simulation;
 public:
 	double P, I, D;
 
-	PID(double p, double i, double d) : P(p), I(i), D(d) {}
+	PID(double p = 0, double i = 0, double d = 0) : P(p), I(i), D(d) {}
 	~PID() = default;
 
 	
 
-	double iteration(double in)
+	double iteration(double err)
 	{
 		return 0;
 	}
 
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(P, I, D)
+	// szablon generujêcy serializacjê i deserializacjê za pomoc¹ JSON
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(PID, P, I, D)
+
 };
 

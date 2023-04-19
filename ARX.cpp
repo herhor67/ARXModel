@@ -7,6 +7,7 @@
 
 //#include <exception>
 #include <stdexcept>
+#include <random>
 
 
 
@@ -16,7 +17,7 @@
  - B - wektor z danymi typu double reprezentujący licznik
  - dly - wartość typu unsigned reprezentująca opóźnienie
  - ns - wartość typu double reprezentująca amplitudę szumu */
-ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsigned dly, double ns) : k(dly), noiseamp(ns)
+ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsigned dly, double ns) : k(dly), ns_var(ns)
 {
 	setNum(B);// ustawia wartości wektora B
 	setDen(A);// ustawia wartości wektora A
@@ -45,7 +46,7 @@ double ARX::iteration(double in)
 	double NUMxIN = (B * temp).sum() ; // oblicza iloczyn skalarny wektorów B i temp
 	double DENxOUT = (A * outBuf).sum(); // oblicza iloczyn skalarny wektorów A i outBuf
 
-	double out = NUMxIN - DENxOUT + noiseamp * getNoise(); // oblicza wartość wyjścia algorytmu ARX
+	double out = NUMxIN - DENxOUT + ns_var * getNoise(); // oblicza wartość wyjścia algorytmu ARX
 
 	// przesuwa elementy outBuf o jedno miejsce i dopisuje najnowsze wyjście
 	outBuf = outBuf.shift(-1); 
@@ -61,13 +62,13 @@ wektora inBuf na odpowiednią ilość elementów, z argumentem:
  - n - lista z danymi typu double reprezentujący licznik */
 void ARX::setNum(std::initializer_list<double> n)
 {
-	B = n; // przypisuje wartości z n do wektora B
+	B = n; // przypisuje wartości z n do B
 	inBuf.resize(B.size() + k); // zmienia rozmiar wektora inBuf
 }
 // funkcja ustawiająca wartości wektora A
 void ARX::setDen(std::initializer_list<double> d)
 {
-	A = d; // Przypisanie wektora d do A
+	A = d; // Przypisanie wartości z d do A
 	outBuf.resize(A.size()); // Zmiana rozmiaru wektora outBuf na rozmiar wektora A
 }
 
@@ -80,6 +81,11 @@ void ARX::setup() //Funkcję można wykorzystać do inicjalizacji różnych wart
 //Funkcja mogąca generować szum. W tym przypadku szum nie jest generowany
 double ARX::getNoise()
 {
-	return 0;
+	//std::default_random_engine generator;
+	static std::mt19937 generator;
+	//std::mt19937 generator(std::random_device{}());
+	static std::normal_distribution<double> dist;
+
+	return dist(generator);
 }
 

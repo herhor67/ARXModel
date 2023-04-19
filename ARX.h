@@ -20,11 +20,12 @@ class ARX : public SISO
 	DS A; // den // obiekt klasy valarray przechowujący mianownik
 	DS B; // num  // obiekt klasy valarray przechowujący licznik
 	unsigned k = 0;  // wartość typu unsigned reprezentująca opóźnienie, domyślnie 0
-	double noiseamp = 1; // wartość typu double reprezentująca amplitudę szumu, domyślnie o wartości 1
+	double ns_var = 1; // wartość typu double reprezentująca amplitudę szumu, domyślnie o wartości 1
 
 	DS inBuf; // wektor przechowujący wartości wejściowe wraz z opóźnieniem
 	DS outBuf; // wektor przechowujący wartości wyjściowe wraz z opóźnieniem
 
+	
 
 public:
 	/* Konstruktor klasy ARX z argumentami:
@@ -47,8 +48,8 @@ public:
 
 	static double getNoise(); // deklaracja funkcji statycznej, która może generować szum
 
-
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(A, B, k, noiseamp)
+	// szablon generujęcy serializację i deserializację za pomocą JSON
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ARX, A, B, k, ns_var)
 
 };
 
