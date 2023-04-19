@@ -1,14 +1,18 @@
 #pragma once
 
-#include "SISO.h" // Dołączenie pliku nagłówkowego "SISO.h" do pliku źródłowego
+#include "SISO.h" // Dołączenie pliku nagłówkowego "SISO.h"
 
 #include <valarray>
 #include <span>
 #include <initializer_list>
 
+#include "json.hpp"
+
 // deklaracja klasy ARX dziedziczącej publicznie po klasie SISO
 class ARX : public SISO 
 {
+	friend class Simulation;
+
 	/* definiuje alias typu danych DS, odnosi się do typu std::valarray<double>, 
 	zamiast używać pełnej nazwy, można użyć skróconej nazwy DS */
 	using DS = std::valarray<double>; 
@@ -28,7 +32,7 @@ public:
 	- B - wektor z danymi typu double reprezentujący licznik
 	- dly - wartość typu unsigned reprezentująca opóźnienie, domyślnie 0
 	- ns - wartość typu double reprezentująca amplitudę szumu, domyślnie 1 */
-	ARX(std::initializer_list<double>, std::initializer_list<double>, unsigned = 0, double = 0);
+	ARX(std::initializer_list<double> = {}, std::initializer_list<double> = {}, unsigned = 0, double = 0);
 	~ARX(); // deklaracja destruktora klasy ARX
 
 	double iteration(double); // deklaracja funkcji wykonującej jeden krok symulacji
@@ -42,6 +46,9 @@ public:
 	void setup(); // deklaracja funkcji pomocniczej, której można użyć do inicjalizacji różnych wartości
 
 	static double getNoise(); // deklaracja funkcji statycznej, która może generować szum
+
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(A, B, k, noiseamp)
 
 };
 

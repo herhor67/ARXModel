@@ -21,6 +21,7 @@ ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsig
 	setNum(B);// ustawia wartości wektora B
 	setDen(A);// ustawia wartości wektora A
 }
+
 // destruktor klasy ARX
 ARX::~ARX()
 {}
@@ -30,50 +31,43 @@ ARX::~ARX()
  - in - wartość typu double reprezentująca wejście */
 double ARX::iteration(double in)
 {
-	inBuf = inBuf.shift(-1); // przesuwa wektor inBuf o jedno miejsce/element w lewo
-	if (inBuf.size()) // Jeżeli rozmiar inBuf jest różny od zera
-		inBuf[0] = in; // Ustawienie pierwszego elementu wektora inBuf na wartość in
+	// przesuwa elementy inBuf o jedno miejsce i dopisuje najnowsze wyjście
+	inBuf = inBuf.shift(-1);
+	if (inBuf.size())
+		inBuf[0] = in;
 
 	/* tworzy podwektor inBuf 
-	Wektor inBuf przechowuje wartości wejściowe wraz z opóźnieniem
+	Wektor inBuf przechowuje wartości wejściowe wraz z opóźnieniem "k"
 	 Przypisanie wartości elementów wektora inBuf o indeksach k, k+1, ..., k+B.size()-1 do zmiennej temp 
-	 - k - opóżnienie */
+	*/
 	DS temp = inBuf[std::slice(k, B.size(), 1)]; 
 
-	double NUMxIN = (B * temp).sum() ; // oblicza iloczyn skalarny wektorów B i temp, i przypisanie wyniku do zmiennej NUMxIN
-	double DENxOUT = (A * outBuf).sum(); // oblicza iloczyn skalarny wektorów A i outBuf, i przypisanie wyniku do zmiennej DENxOUT
+	double NUMxIN = (B * temp).sum() ; // oblicza iloczyn skalarny wektorów B i temp
+	double DENxOUT = (A * outBuf).sum(); // oblicza iloczyn skalarny wektorów A i outBuf
 
-	double out = NUMxIN - DENxOUT + noiseamp * getNoise(); // oblicza wartość wyjścia algorytmu ARX i przypisanie wyniku do zmiennej out
+	double out = NUMxIN - DENxOUT + noiseamp * getNoise(); // oblicza wartość wyjścia algorytmu ARX
 
-	// wektor outBuf przechowuje wartości wyjściowe wraz z opóźnieniem
-	outBuf = outBuf.shift(-1); // przesuwa wektor outBuf o jedno miejsce/element w lewo
-	if (outBuf.size()) // Jeżeli rozmiar outBuf jest różny od zera
-		outBuf[0] = out; // Ustawienie pierwszego elementu wektora outBuf na wartość out
+	// przesuwa elementy outBuf o jedno miejsce i dopisuje najnowsze wyjście
+	outBuf = outBuf.shift(-1); 
+	if (outBuf.size())
+		outBuf[0] = out;
 
-	return out; // zwraca wartość wyjścia "out"
+	return out; // zwraca wartość wyjścia
 }
 
 
-/* Funkcja klasy ARX ustawiająca wartości wektora B oraz przesuwająca 
-wartości wektora inBuf o odpowiednią ilość elementów, z argumentem:
- - n - wektor z danymi typu double reprezentujący licznik */
+/* Funkcja klasy ARX ustawiająca wartości tablicy B oraz zmieniająca rozmiar
+wektora inBuf na odpowiednią ilość elementów, z argumentem:
+ - n - lista z danymi typu double reprezentujący licznik */
 void ARX::setNum(std::initializer_list<double> n)
 {
 	B = n; // przypisuje wartości z n do wektora B
-
 	inBuf.resize(B.size() + k); // zmienia rozmiar wektora inBuf
 }
 // funkcja ustawiająca wartości wektora A
 void ARX::setDen(std::initializer_list<double> d)
 {
-	//if (d.size() == 0)
-	//	throw std::invalid_argument("Denominator (A) must be of length at least one!");
-
 	A = d; // Przypisanie wektora d do A
-	
-	//if (A[0] != 1)
-	//	A /= A[0];
-
 	outBuf.resize(A.size()); // Zmiana rozmiaru wektora outBuf na rozmiar wektora A
 }
 

@@ -1,5 +1,6 @@
 
 #include "ARX.h"
+#include "Simulation.h"
 
 
 #include "settings.h"
@@ -11,20 +12,19 @@
 
 #ifndef NDEBUG
 
-void raportBleduSekwencji(std::vector<double>& spodz, std::vector<double>& fakt)
+void raportBleduSekwencji(const std::vector<double>& spodz, const std::vector<double>& fakt)
 {
 	constexpr size_t PREC = 3;
 	std::cerr << std::fixed << std::setprecision(PREC);
 	std::cerr << "  Spodziewany:\t";
-	for (auto& el : spodz)
+	for (const auto& el : spodz)
 		std::cerr << el << ", ";
 	std::cerr << "\n  Faktyczny:\t";
-	for (auto& el : fakt)
+	for (const auto& el : fakt)
 		std::cerr << el << ", ";
 	std::cerr << std::endl << std::endl;
 }
-
-bool porownanieSekwencji(std::vector<double>& spodz, std::vector<double>& fakt)
+bool porownanieSekwencji(const std::vector<double>& spodz, const std::vector<double>& fakt)
 {
 	constexpr double TOL = 1e-3;	// tolerancja dla porównań zmiennoprzecinkowych
 	bool result = fakt.size() == spodz.size();
@@ -65,7 +65,6 @@ void test_ARX_brakPobudzenia()
 		std::cerr << "INTERUPTED! (niespodziwany wyjatek)\n";
 	}
 }
-
 void test_ARX_skokJednostkowy_1()
 {
 	//Sygnatura testu:
@@ -103,7 +102,6 @@ void test_ARX_skokJednostkowy_1()
 		std::cerr << "INTERUPTED! (niespodziwany wyjatek)\n";
 	}
 }
-
 void test_ARX_skokJednostkowy_2()
 {
 	//Sygnatura testu:
@@ -141,7 +139,6 @@ void test_ARX_skokJednostkowy_2()
 		std::cerr << "INTERUPTED! (niespodziwany wyjatek)\n";
 	}
 }
-
 void test_ARX_skokJednostkowy_3()
 {
 	//Sygnatura testu:
@@ -203,7 +200,13 @@ int main()
 {
 	cout << "Hello there!" << endl;
 
-	ARX arxm;
+	ARX arx({ 1 }, { 1,1 }, 1, 0);
+
+	PID pid(10, 1, 0);
+
+	Simulation sim(arx, pid);
+
+	sim.save("save.txt");
 }
 
 

@@ -2,6 +2,8 @@
 
 class SISO
 {
+	friend class Simulation;
+
 public:
 	// Konstruktor domyślny klasy SISO. Oznaczenie "= default" wskazuje na to,
 	// że konstruktor ten ma zostać wygenerowany automatycznie przez kompilator
