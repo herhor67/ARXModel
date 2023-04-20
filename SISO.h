@@ -2,6 +2,7 @@
 
 class SISO
 {
+	// deklaracja klasy Simulation jako przyjaciela klasy SISO
 	friend class Simulation;
 
 public:
