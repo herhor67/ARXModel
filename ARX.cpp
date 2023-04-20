@@ -78,7 +78,15 @@ void ARX::setup() //Funkcję można wykorzystać do inicjalizacji różnych wart
 }
 
 // static S.H.I.T.
-//Funkcja mogąca generować szum. W tym przypadku szum nie jest generowany
+/**
+Funkcja dodaje losowy szum do sygnału wejściowego w celu symulacji warunków pracy.
+-Funkcja zwraca losową wartość z rozkładu normalnego (tzw. Gaussa) o średniej równej 0 i wariancji równej 1,
+-wykorzystując generator liczb pseudolosowych typu std::mt19937, 
+-Generator oraz rozkład są zainicjalizowane tylko raz,
+-Wartość zwracana przez funkcję jest zawsze losowa,
+-niezależność losowania zapewniona jest poprzez użycie zmiennej statycznej,
+-@return double - wartość wygenerowana z dystrybucji normalnej.
+*/
 double ARX::getNoise()
 {
 	//std::default_random_engine generator;
