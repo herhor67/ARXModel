@@ -6,12 +6,12 @@
 #include <span>
 #include <initializer_list>
 
-#include "json.hpp"
+#include "json.hpp" // Biblioteka obsługująca format JSON
 
 // deklaracja klasy ARX dziedziczącej publicznie po klasie SISO
 class ARX : public SISO 
 {
-	friend class Simulation;
+	friend class Simulation; // Deklaracja przyjaźni z klasą Simulation
 
 	/* definiuje alias typu danych DS, odnosi się do typu std::valarray<double>, 
 	zamiast używać pełnej nazwy, można użyć skróconej nazwy DS */
@@ -48,7 +48,9 @@ public:
 
 	static double getNoise(); // deklaracja funkcji statycznej, która może generować szum
 
-	// szablon generujęcy serializację i deserializację za pomocą JSON
+	/* szablon generujęcy serializację i deserializację obiektu klasy ARX za pomocą biblioteki JSON nlohmann
+	Szablon zapisuje obiektu klasy ARX do formatu JSON i odczytuje obiektu klasy ARX z formatu JSON 
+	Argumenty szablonu określają, które pola klasy ARX mają być zserializowane/deserializowane i w jakiej kolejności*/
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ARX, A, B, k, ns_var)
 
 };
