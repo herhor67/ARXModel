@@ -11,7 +11,7 @@ using json = nlohmann::json;
 // Definicja konstruktora z parametrami klasy Simulation, przyjmującego obiekty klasy ARX i PID
 Simulation::Simulation(const ARX& a, const PID& p) : arx(a), pid(p) {}
 
-// Definicja konstruktora wczytująca dane  z pliku
+// Definicja konstruktora wczytującego dane z pliku
 Simulation::Simulation(const std::string& file)
 {
 	try
@@ -31,24 +31,45 @@ Simulation::Simulation(const std::string& file)
 
 }
 
-
 // Konstruktor domyślny klasy Simulation
 Simulation::Simulation() = default;
+
+
+void Simulation::run(size_t iter, double setpoint)
+{
+	double arxout = 0;
+	double err, ster;
+
+	for (size_t i = 0; i < iter; ++i)
+	{
+		double err = setpoint - arxout;
+		double ster = pid.sim(err);
+		arxout = arx.sim(ster);
+	}
+
+}
+
 
 // Metoda save klasy Simulation, zapisująca parametry symulacji do pliku JSON o nadanej nazwie
 // Argumenty szablonu, pola A, B, k, ns_var oraz nastawy regulatora PID klasy ARX i PID będące zapisane/deserializowane do/z formatu JSON.
 void Simulation::save(const std::string& file)
 {
-	json j; // Tworzenie obiektu json
+	try
+	{
+		json j; // Tworzenie obiektu json
 	
-	// Zapisanie parametrów obiektów ARX i PID do obiektu json
-	j["ARX"] = arx;
-	j["PID"] = pid;
+		// Zapisanie parametrów obiektów ARX i PID do obiektu json
+		j["ARX"] = arx;
+		j["PID"] = pid;
 
-	// Następuje otwarcie pliku i zapisuje się obiektu json
-	std::ofstream out(file);
-	
-	// Zapisanie danych w formacie JSON do pliku za pomocą strumienia wyjściowego
-	out << j;
-
+		// Otwarcie pliku
+		std::ofstream out(file);
+		// Zapisanie danych w formacie JSON do pliku za pomocą strumienia wyjściowego
+		out << j;
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Nie udało się zapisać parametrów symulacji do pliku!" << std::endl;
+		std::cerr << e.what() << std::endl;
+	}
 }
