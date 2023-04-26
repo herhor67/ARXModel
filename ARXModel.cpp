@@ -202,7 +202,6 @@ int main()
 
 	Simulation sim("save.json");
 
-	sim.save("save2.json");
 
 	system("PAUSE");
 }

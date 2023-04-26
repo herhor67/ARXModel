@@ -16,6 +16,6 @@ public:
 	// Metoda ta przyjmuje jako argument sygnał wejściowy i zwraca sygnał wyjściowy,
 	// jest czysto wirtualna, co oznacza, że nie jest ona zdefiniowana 
 	// w tej klasie i musi zostać zaimplementowana w klasie dziedziczącej.
-	virtual double iteration(double) = 0;
+	virtual double sim(double) = 0;
 
 };

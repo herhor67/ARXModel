@@ -12,18 +12,14 @@ class PID : public SISO
 public:
 	// Składowe klasy PID
 	double P, I, D;
+	double sumerr, lasterr;
 
 	// Konstruktor klasy PID przyjmuje opcjonalne wartości składowych P, I i D. Domyślnie ustawione na 0.
-	PID(double p = 0, double i = 0, double d = 0) : P(p), I(i), D(d) {}
+	PID(double = 0, double = 0, double = 0);
 	
-	~PID() = default; // Destruktor klasy PID jest zdefiniowany domyślnie.
+	~PID();
 
-	/* Metoda iteration reprezentuje jedną iterację regulatora PID.
-	Przyjmuje jako argument sygnał wejściowy (błąd regulacji) i zwraca sygnał wyjściowy (sygnał sterujący) */
-	double iteration(double err)
-	{
-		return 0;
-	}
+	double sim(double);
 	
 	// Szablon generujący serializację i deserializację klasy PID za pomocą biblioteki nlohmann::json.
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE(PID, P, I, D)

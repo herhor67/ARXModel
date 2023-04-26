@@ -30,7 +30,7 @@ ARX::~ARX()
 
 /* Funkcja klasy ARX wykonująca jeden krok symulacji, z argumentem:
  - in - wartość typu double reprezentująca wejście */
-double ARX::iteration(double in)
+double ARX::sim(double in)
 {
 	// przesuwa elementy inBuf o jedno miejsce i dopisuje najnowsze wyjście
 	inBuf = inBuf.shift(-1);

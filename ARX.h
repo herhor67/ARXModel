@@ -36,7 +36,7 @@ public:
 	ARX(std::initializer_list<double> = {}, std::initializer_list<double> = {}, unsigned = 0, double = 0);
 	~ARX(); // deklaracja destruktora klasy ARX
 
-	double iteration(double); // deklaracja funkcji wykonującej jeden krok symulacji
+	double sim(double); // deklaracja funkcji wykonującej jeden krok symulacji
 
 	/* deklaracja funkcji ustawiającej wartości wektora B oraz przesuwającej 
 	wartości wektora inBuf o odpowiednią ilość elementów */

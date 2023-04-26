@@ -24,6 +24,9 @@ public:
 	// Destruktor klasy Simulation, który jest domyślny.
 	~Simulation() = default;
 
+
+	iteration
+
 	/* Metoda save zapisuje symulację do pliku. 
 	Wykorzystywana jest biblioteka json.hpp, która umożliwia zapisywanie danych w formacie JSON. */
 	void save(const std::string&);
