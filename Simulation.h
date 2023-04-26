@@ -25,7 +25,7 @@ public:
 	~Simulation() = default;
 
 
-	void run(size_t, double);
+	void run(size_t, double = 0);
 
 	/* Metoda save zapisuje symulację do pliku. 
 	Wykorzystywana jest biblioteka json.hpp, która umożliwia zapisywanie danych w formacie JSON. */

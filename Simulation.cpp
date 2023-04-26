@@ -42,9 +42,10 @@ void Simulation::run(size_t iter, double setpoint)
 
 	for (size_t i = 0; i < iter; ++i)
 	{
-		double err = setpoint - arxout;
-		double ster = pid.sim(err);
+		err = setpoint - arxout;
+		ster = pid.sim(err);
 		arxout = arx.sim(ster);
+		std::cout << err << '\t' << ster << '\t' << arxout << std::endl;
 	}
 
 }
