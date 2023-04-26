@@ -176,10 +176,6 @@ void test_ARX_skokJednostkowy_3()
 	}
 }
 
-#endif
-
-
-#ifndef NDEBUG
 
 int main()
 {
@@ -194,19 +190,19 @@ int main()
 #else
 
 
-
-
 int main()
 {
 	cout << "Hello there!" << endl;
 
-	ARX arx({ 1 }, { 1,1 }, 1, 0);
+	//ARX arx({ 1 }, { 1,1 }, 1, 0);
+	//PID pid(10, 1, 0);
 
-	PID pid(10, 1, 0);
+	//Simulation sim(arx, pid);
+	//sim.save("save.json");
 
-	Simulation sim(arx, pid);
+	Simulation sim("save.json");
 
-	sim.save("save.json");
+	sim.save("save2.json");
 
 	system("PAUSE");
 }

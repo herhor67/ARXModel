@@ -11,11 +11,32 @@ using json = nlohmann::json;
 // Definicja konstruktora z parametrami klasy Simulation, przyjmującego obiekty klasy ARX i PID
 Simulation::Simulation(const ARX& a, const PID& p) : arx(a), pid(p) {}
 
+Simulation::Simulation(const std::string& file)
+{
+	try
+	{
+		std::ifstream ifs(file);
+		json j = json::parse(ifs);
+
+		arx = j["ARX"];
+		pid = j["PID"];
+
+	}
+	catch (const std::exception& e)
+	{
+		std::cerr << "Nie udało się wczytać parametrów symulacji z pliku!" << std::endl;
+		std::cerr << e.what() << std::endl;
+	}
+
+}
+
+
 // Konstruktor domyślny klasy Simulation
 Simulation::Simulation() {}
 
 // Metoda save klasy Simulation, zapisująca parametry symulacji do pliku JSON o nadanej nazwie
-void Simulation::save(std::string file)
+// Argumenty szablonu, pola A, B, k, ns_var oraz nastawy regulatora PID klasy ARX i PID będące zapisane/deserializowane do/z formatu JSON.
+void Simulation::save(const std::string& file)
 {
 	json j; // Tworzenie obiektu json
 	

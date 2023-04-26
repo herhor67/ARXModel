@@ -48,7 +48,7 @@ public:
 
 	static double getNoise(); // deklaracja funkcji statycznej, która może generować szum
 
-	/* szablon generujęcy serializację i deserializację obiektu klasy ARX za pomocą biblioteki JSON nlohmann
+	/* szablon generujący serializację i deserializację obiektu klasy ARX za pomocą biblioteki JSON nlohmann
 	Szablon zapisuje obiektu klasy ARX do formatu JSON i odczytuje obiektu klasy ARX z formatu JSON 
 	Argumenty szablonu określają, które pola klasy ARX mają być zserializowane/deserializowane i w jakiej kolejności*/
 	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ARX, A, B, k, ns_var)
