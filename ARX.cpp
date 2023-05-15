@@ -4,12 +4,9 @@
 
 #include "helpers.h"
 
-
 //#include <exception>
 #include <stdexcept>
 #include <random>
-
-
 
 
 /* konstruktor klasy ARX z argumentami:
@@ -35,7 +32,7 @@ double ARX::sim(double in)
 	// przesuwa elementy inBuf o jedno miejsce i dopisuje najnowsze wyjście
 	inBuf = inBuf.shift(-1);
 	if (inBuf.size())
-		inBuf[0] = in;
+		inBuf[0] = in; // Dopisanie najnowszego wejścia na pierwszą pozycję wektora inBuf.
 
 	/* tworzy podwektor inBuf 
 	Wektor inBuf przechowuje wartości wejściowe wraz z opóźnieniem "k"
@@ -51,7 +48,7 @@ double ARX::sim(double in)
 	// przesuwa elementy outBuf o jedno miejsce i dopisuje najnowsze wyjście
 	outBuf = outBuf.shift(-1); 
 	if (outBuf.size())
-		outBuf[0] = out;
+		outBuf[0] = out; // Dopisanie najnowszego wyjścia na pierwszą pozycję wektora outBuf.
 
 	return out; // zwraca wartość wyjścia
 }
@@ -62,13 +59,13 @@ wektora inBuf na odpowiednią ilość elementów, z argumentem:
  - n - lista z danymi typu double reprezentujący licznik */
 void ARX::setNum(std::initializer_list<double> n)
 {
-	B = n; // przypisuje wartości z n do B
+	B = n; // Przypisanie wartości z listy n do tablicy B.
 	inBuf.resize(B.size() + k); // zmienia rozmiar wektora inBuf
 }
 // funkcja ustawiająca wartości wektora A
 void ARX::setDen(std::initializer_list<double> d)
 {
-	A = d; // Przypisanie wartości z d do A
+	A = d; // Przypisanie wartości z listy d do wektora A.
 	outBuf.resize(A.size()); // Zmiana rozmiaru wektora outBuf na rozmiar wektora A
 }
 
@@ -90,10 +87,12 @@ Funkcja dodaje losowy szum do sygnału wejściowego w celu symulacji warunków p
 double ARX::getNoise()
 {
 	//std::default_random_engine generator;
-	static std::mt19937 generator;
+
+	static std::mt19937 generator; // Statyczny generator liczb pseudolosowych typu std::mt19937
+
 	//std::mt19937 generator(std::random_device{}());
-	static std::normal_distribution<double> dist;
 
-	return dist(generator);
+	static std::normal_distribution<double> dist; // Statyczny rozkład normalny (Gaussa).
+
+	return dist(generator); // Zwraca losową wartość z rozkładu normalnego.
 }
-
