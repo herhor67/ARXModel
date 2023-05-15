@@ -34,7 +34,7 @@ Simulation::Simulation(const std::string& file)
 // Konstruktor domyślny klasy Simulation
 Simulation::Simulation() = default;
 
-
+// Metoda run klasy Simulation, wykonująca symulację o zadanej liczbie iteracji i wartości punktu zadanej
 void Simulation::run(size_t iter, double setpoint)
 {
 	double arxout = 0;
