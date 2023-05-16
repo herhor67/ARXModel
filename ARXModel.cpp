@@ -1,7 +1,5 @@
-
 #include "ARX.h"
 #include "Simulation.h"
-
 
 #include "settings.h"
 
@@ -9,9 +7,13 @@
 
 #include <vector>
 
-
 #ifndef NDEBUG
 
+/**
+ * Funkcja raportuje o błędach w sekwencji, porównując oczekiwane wartości z faktycznymi.
+ * @param spodz - wektor zawierający spodziewane wartości sekwencji
+ * @param fakt - wektor zawierający faktyczne wartości sekwencji
+ */
 void raportBleduSekwencji(const std::vector<double>& spodz, const std::vector<double>& fakt)
 {
 	constexpr size_t PREC = 3;
@@ -24,6 +26,12 @@ void raportBleduSekwencji(const std::vector<double>& spodz, const std::vector<do
 		std::cerr << el << ", ";
 	std::cerr << std::endl << std::endl;
 }
+/**
+ * Funkcja porównująca dwie sekwencje liczb zmiennoprzecinkowych
+ * @param spodz - wektor zawierający spodziewane wartości sekwencji
+ * @param fakt - wektor zawierający faktyczne wartości sekwencji
+ * @return true, jeśli sekwencje są takie same; false, odwrotne zdarzenie
+ */
 bool porownanieSekwencji(const std::vector<double>& spodz, const std::vector<double>& fakt)
 {
 	constexpr double TOL = 1e-3;	// tolerancja dla porównań zmiennoprzecinkowych
@@ -32,7 +40,9 @@ bool porownanieSekwencji(const std::vector<double>& spodz, const std::vector<dou
 		result = fabs(fakt[i] - spodz[i]) < TOL;
 	return result;
 }
-
+/**
+ * Testuje ARX dla braku pobudzenia.
+ */
 void test_ARX_brakPobudzenia()
 {
 	//Sygnatura testu:
@@ -47,7 +57,6 @@ void test_ARX_brakPobudzenia()
 		std::vector<double> faktSygWy(LICZ_ITER);  // faktyczna sekwencja wy
 
 		// Symulacja modelu:
-
 		for (int i = 0; i < LICZ_ITER; i++)
 			faktSygWy[i] = instancjaTestowa.sim(sygWe[i]);
 
@@ -65,6 +74,7 @@ void test_ARX_brakPobudzenia()
 		std::cerr << "INTERUPTED! (niespodziwany wyjatek)\n";
 	}
 }
+// Test - skok jednostkowy nr 1
 void test_ARX_skokJednostkowy_1()
 {
 	//Sygnatura testu:
@@ -102,6 +112,7 @@ void test_ARX_skokJednostkowy_1()
 		std::cerr << "INTERUPTED! (niespodziwany wyjatek)\n";
 	}
 }
+// Test - skok jednostkowy nr 2
 void test_ARX_skokJednostkowy_2()
 {
 	//Sygnatura testu:
@@ -139,6 +150,7 @@ void test_ARX_skokJednostkowy_2()
 		std::cerr << "INTERUPTED! (niespodziwany wyjatek)\n";
 	}
 }
+// Test - skok jednostkowy nr 3
 void test_ARX_skokJednostkowy_3()
 {
 	//Sygnatura testu:
@@ -176,37 +188,33 @@ void test_ARX_skokJednostkowy_3()
 	}
 }
 
-
 int main()
 {
-	test_ARX_brakPobudzenia();
-	test_ARX_skokJednostkowy_1();
-	test_ARX_skokJednostkowy_2();
-	test_ARX_skokJednostkowy_3();
+	// Testy dla modelu ARX
+	test_ARX_brakPobudzenia(); // Wywołanie testu dla ARX bez pobudzenia
+	test_ARX_skokJednostkowy_1(); // Wywołanie testu dla ARX z skokiem jednostkowym nr 1
+	test_ARX_skokJednostkowy_2(); // Wywołanie testu dla ARX z skokiem jednostkowym nr 2
+	test_ARX_skokJednostkowy_3(); // Wywołanie testu dla ARX z skokiem jednostkowym nr 3
 
-	system("PAUSE");
+	system("PAUSE"); // Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
 }
 
 #else
-
 
 int main()
 {
 	cout << "Hello there!" << endl;
 
-	ARX arx({ 1,1 }, { 1 }, 1, 0);
-	PID pid(10, 1, 0);
+	ARX arx({ 1,1 }, { 1 }, 1, 0); // Inicjalizacja obiektu ARX
+	PID pid(10, 1, 0); // Inicjalizacja obiektu PID
 
-	Simulation sim(arx, pid);
-	//sim.save("save.json");
+	Simulation sim(arx, pid); // Inicjalizacja obiektu symulacji z ARX i PID
+	//sim.save("save.json"); // Zapisanie symulacji do pliku JSON
 
-	//Simulation sim("save.json");
+	//Simulation sim("save.json"); // Wczytanie symulacji z pliku JSON
 
-	sim.run(10, 1);
+	sim.run(10, 1); // Uruchomienie symulacji przez 10 jednostek czasu z krokiem równym 1
 
-	system("PAUSE");
+	system("PAUSE"); // Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
 }
-
-
-
-#endif //ndebug
+#endif //ndebug // Warunek kompilacji w trybie Release
