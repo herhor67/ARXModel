@@ -131,11 +131,13 @@
   <ItemGroup>
     <ClCompile Include="ARX.cpp" />
     <ClCompile Include="ARXModel.cpp" />
+    <ClCompile Include="Generator.cpp" />
     <ClCompile Include="PID.cpp" />
     <ClCompile Include="Simulation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ARX.h" />
+    <ClInclude Include="Generator.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="PID.h" />
     <ClInclude Include="settings.h" />

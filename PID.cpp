@@ -1,7 +1,7 @@
 ﻿#include "PID.h"
 
 // Konstruktor klasy PID przyjmuje opcjonalne wartości składowych P, I i D. Domyślnie ustawione na 0.
-PID::PID(double p, double i, double d) : P(p), I(i), D(d) {}
+PID::PID(double p, double i, double d) : P(p), I(i), D(d), sumerr(0), lasterr(0) {}
 
 PID::~PID() = default; // Destruktor klasy PID jest zdefiniowany domyślnie.
 

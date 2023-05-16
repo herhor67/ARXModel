@@ -27,6 +27,9 @@
     <ClCompile Include="PID.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Generator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="SISO.h">
@@ -49,6 +52,9 @@
     </ClInclude>
     <ClInclude Include="json.hpp">
       <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Generator.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -87,9 +87,7 @@ Funkcja dodaje losowy szum do sygnału wejściowego w celu symulacji warunków p
 double ARX::getNoise()
 {
 	//std::default_random_engine generator;
-
 	static std::mt19937 generator; // Statyczny generator liczb pseudolosowych typu std::mt19937
-
 	//std::mt19937 generator(std::random_device{}());
 
 	static std::normal_distribution<double> dist; // Statyczny rozkład normalny (Gaussa).
