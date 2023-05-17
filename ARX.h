@@ -7,6 +7,7 @@
 #include <initializer_list>
 
 #include "json.hpp" // Biblioteka obsługująca format JSON
+using json = nlohmann::json;
 
 // deklaracja klasy ARX dziedziczącej publicznie po klasie SISO
 class ARX : public SISO 
@@ -48,10 +49,27 @@ public:
 
 	static double getNoise(); // deklaracja funkcji statycznej, która może generować szum
 
-	/* szablon generujący serializację i deserializację obiektu klasy ARX za pomocą biblioteki JSON nlohmann
+	/* serializacja i deserializacja obiektu klasy ARX za pomocą biblioteki JSON nlohmann
 	Szablon zapisuje obiektu klasy ARX do formatu JSON i odczytuje obiektu klasy ARX z formatu JSON 
 	Argumenty szablonu określają, które pola klasy ARX mają być zserializowane/deserializowane i w jakiej kolejności*/
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(ARX, A, B, k, ns_var)
+	friend void to_json(json& j, const ARX& o)
+	{
+		j["A"] = o.A;
+		j["B"] = o.B;
+		j["k"] = o.k;
+		j["ns_var"] = o.ns_var;
+	}
+
+	friend void from_json(const json& j, ARX& o)
+	{
+		j.at("A").get_to(o.A);
+		j.at("B").get_to(o.B);
+		j.at("k").get_to(o.k);
+		j.at("ns_var").get_to(o.ns_var);
+
+		o.outBuf.resize(o.A.size());
+		o.inBuf.resize(o.B.size());
+	}
 
 };
 

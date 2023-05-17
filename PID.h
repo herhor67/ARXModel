@@ -3,6 +3,7 @@
 #include "SISO.h"
 
 #include "json.hpp" // Wczytanie biblioteki "json.hpp", która umożliwia serializację i deserializację obiektów JSON.
+using json = nlohmann::json;
 
 // Klasa PID dziedziczy po klasie SISO i definiuje regulator PID
 class PID : public SISO
@@ -24,7 +25,19 @@ public:
 	double sim(double);
 	
 	// Szablon generujący serializację i deserializację klasy PID za pomocą biblioteki nlohmann::json.
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(PID, P, I, D)
+	friend void to_json(json& j, const PID& o)
+	{
+		j["P"] = o.P;
+		j["I"] = o.I;
+		j["D"] = o.D;
+	}
+
+	friend void from_json(const json& j, PID& o)
+	{
+		j.at("P").get_to(o.P);
+		j.at("I").get_to(o.I);
+		j.at("D").get_to(o.D);
+	}
 
 };
 

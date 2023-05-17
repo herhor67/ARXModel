@@ -130,7 +130,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ARX.cpp" />
-    <ClCompile Include="ARXModel.cpp" />
+    <ClCompile Include="main.cpp" />
     <ClCompile Include="Generator.cpp" />
     <ClCompile Include="PID.cpp" />
     <ClCompile Include="Simulation.cpp" />

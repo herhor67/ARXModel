@@ -15,3 +15,4 @@ double PID::sim(double err)
 
 	return P * err + I * sumerr + D * differr; // Obliczenie sygnału sterującego z wykorzystaniem składowych P, I i D
 }
+
