@@ -50,7 +50,7 @@ void Simulation::run(size_t iter)
 
 		arxout = arx.sim(ster);
 
-		std::cout << setp << '\t' << err << '\t' << ster << '\t' << arxout << std::endl;
+		std::cout << "Setp: " << setp << "\t\tErr: " << err << "\t\tSter: " << ster << "\t\tARX: " << arxout << std::endl;
 	}
 
 }
