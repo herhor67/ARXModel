@@ -6,6 +6,8 @@
 #include <cmath>
 #include <numbers>
 
+#include <utility>
+
 
 class Signal
 {
@@ -15,12 +17,14 @@ public:
 	virtual double get(size_t) const = 0;
 };
 
+using SignalPtr = std::unique_ptr<Signal>;
 
 class SignalConst : public Signal
 {
 public:
 	SignalConst() = default;
 	~SignalConst() = default;
+
 	double get(size_t)  const override
 	{
 		return 1;
@@ -34,6 +38,7 @@ class SignalSine : public Signal
 public:
 	SignalSine(double t) : T(t) {}
 	~SignalSine() = default;
+
 	double get(size_t i)  const override
 	{
 		return std::sin(i * 2 * std::numbers::pi / T);
@@ -48,6 +53,7 @@ class SignalSquare : public Signal
 public:
 	SignalSquare(double t, double d = 0.5) : T(t), D(d) {}
 	~SignalSquare() = default;
+
 	double get(size_t i)  const override
 	{
 		double trash;
@@ -63,6 +69,7 @@ class SignalTriangle : public Signal
 public:
 	SignalTriangle(double t) : T(t) {}
 	~SignalTriangle() = default;
+
 	double get(size_t i) const override
 	{
 		double trash;
@@ -75,15 +82,45 @@ public:
 	}
 };
 
+class SignalImpulse : public Signal
+{
+public:
+	SignalImpulse() {}
+	~SignalImpulse() = default;
 
-using SignalPtr = std::unique_ptr<Signal>;
+	double get(size_t i) const override
+	{
+		return i == 0;
+	}
+};
+
+class SignalDelay : Signal
+{
+	size_t D;
+	SignalPtr S;
+
+public:
+	SignalDelay(size_t d, SignalPtr&& s) : D(d), S(std::move(s)) {}
+	~SignalDelay() = default;
+	SignalDelay(SignalDelay&&) = default;
+
+	double get(size_t i) const override
+	{
+		if (i < D)
+			return 0;
+		return S->get(i-D);
+	}
+};
+
+
 
 enum class SignalType : uint8_t
 {
 	Const,
 	Sine,
 	Square,
-	Triangle
+	Triangle,
+	Impulse,
 };
 
 
@@ -97,7 +134,9 @@ public:
 	Generator() = default;
 	~Generator() = default;
 
-	void Add(double a, SignalPtr s)
+	Generator(Generator&&) = default;
+
+	void add(double a, SignalPtr&& s)
 	{
 		signals.emplace_back(a, std::move(s));
 	}

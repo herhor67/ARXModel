@@ -24,7 +24,6 @@ ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsig
 ARX::~ARX()
 {}
 
-
 /* Funkcja klasy ARX wykonująca jeden krok symulacji, z argumentem:
  - in - wartość typu double reprezentująca wejście */
 double ARX::sim(double in)

@@ -9,7 +9,7 @@
 using json = nlohmann::json;
 
 // Definicja konstruktora z parametrami klasy Simulation, przyjmującego obiekty klasy ARX i PID
-Simulation::Simulation(const ARX& a, const PID& p) : arx(a), pid(p) {}
+Simulation::Simulation(ARX&& a, PID&& p, Generator&& g) : arx(std::move(a)), pid(std::move(p)), gen(std::move(g)) {}
 
 // Definicja konstruktora wczytującego dane z pliku
 Simulation::Simulation(const std::string& file)
@@ -21,6 +21,7 @@ Simulation::Simulation(const std::string& file)
 
 		arx = j["ARX"];
 		pid = j["PID"];
+		//gen = j["gen"];
 
 	}
 	catch (const std::exception& e)
@@ -35,17 +36,21 @@ Simulation::Simulation(const std::string& file)
 Simulation::Simulation() = default;
 
 // Metoda run klasy Simulation, wykonująca symulację o zadanej liczbie iteracji i wartości punktu zadanej
-void Simulation::run(size_t iter, double setpoint)
+void Simulation::run(size_t iter)
 {
 	double arxout = 0;
-	double err, ster;
+	double setp, err, ster;
 
 	for (size_t i = 0; i < iter; ++i)
 	{
-		err = setpoint - arxout;
+		setp = gen.get(i);
+		err = setp - arxout;
+
 		ster = pid.sim(err);
+
 		arxout = arx.sim(ster);
-		std::cout << err << '\t' << ster << '\t' << arxout << std::endl;
+
+		std::cout << setp << '\t' << err << '\t' << ster << '\t' << arxout << std::endl;
 	}
 
 }

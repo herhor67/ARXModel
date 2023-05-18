@@ -1,7 +1,11 @@
+#include "settings.h"
+
 #include "ARX.h"
+#include "PID.h"
+#include "Generator.h"
 #include "Simulation.h"
 
-#include "settings.h"
+
 
 #include <iomanip>
 
@@ -205,15 +209,18 @@ int main()
 {
 	cout << "Hello there!" << endl;
 
-	ARX arx({ 1,1 }, { 1 }, 1, 0); // Inicjalizacja obiektu ARX
-	PID pid(10, 1, 0); // Inicjalizacja obiektu PID
+	ARX arx({ 1.2, -0.6, 0.8, 0.2 }, { 0.5, -0.2, 0.3 }, 1, 0); // Inicjalizacja obiektu ARX
+	PID pid(1.32, 0.7, 0.175); // Inicjalizacja obiektu PID
 
-	Simulation sim(arx, pid); // Inicjalizacja obiektu symulacji z ARX i PID
+	Generator gen;
+	gen.add(1, std::make_unique<SignalConst>());
+
+	Simulation sim(std::move(arx), std::move(pid), std::move(gen)); // Inicjalizacja obiektu symulacji z ARX i PID
 	//sim.save("save.json"); // Zapisanie symulacji do pliku JSON
 
 	//Simulation sim("save.json"); // Wczytanie symulacji z pliku JSON
 
-	sim.run(10, 1); // Uruchomienie symulacji przez 10 jednostek czasu z krokiem równym 1
+	sim.run(100); // Uruchomienie symulacji przez 10 jednostek czasu z krokiem równym 1
 
 	system("PAUSE"); // Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
 }
