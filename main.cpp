@@ -209,18 +209,19 @@ int main()
 {
 	cout << "Hello there!" << endl;
 
-	ARX arx({ 0, -0.01, 0.05 } , { 1, -0.3, 0.5, 0.05 }, 1, 0); // Inicjalizacja obiektu ARX
-	PID pid(0.4, 0.1, 0.05); // Inicjalizacja obiektu PID
+	ARX arx({ -0.5, 0.6, 0.15 }, { 0.2, -0.1, 0.15 }, 1, 0); // Inicjalizacja obiektu ARX
+	PID pid(1.32, 0.7, 0.175); // Inicjalizacja obiektu PID
 
 	Generator gen;
 	gen.add(1, std::make_unique<SignalConst>());
+	//gen.add(1, std::make_unique<SignalImpulse>());
 
 	Simulation sim(std::move(arx), std::move(pid), std::move(gen)); // Inicjalizacja obiektu symulacji z ARX i PID
 	//sim.save("save.json"); // Zapisanie symulacji do pliku JSON
 
 	//Simulation sim("save.json"); // Wczytanie symulacji z pliku JSON
 
-	sim.run(10); // Uruchomienie symulacji przez 10 jednostek czasu z krokiem równym 1
+	sim.run(100); // Uruchomienie symulacji przez 10 jednostek czasu z krokiem równym 1
 
 	system("PAUSE"); // Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
 }
