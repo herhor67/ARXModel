@@ -209,9 +209,8 @@ int main()
 {
 	cout << "Hello there!" << endl;
 
-	ARX arx({ 0.5, -0.2, 0.3 } , { 1.2, -0.6, 0.8, 0.2 }, 0, 0); // Inicjalizacja obiektu ARX
-	//PID pid(1.32, 0.7, 0.175); // Inicjalizacja obiektu PID
-	PID pid(1, 0.1, 0.01); // Inicjalizacja obiektu PID
+	ARX arx({ 0, -0.01, 0.05 } , { 1, -0.3, 0.5, 0.05 }, 1, 0); // Inicjalizacja obiektu ARX
+	PID pid(0.4, 0.1, 0.05); // Inicjalizacja obiektu PID
 
 	Generator gen;
 	gen.add(1, std::make_unique<SignalConst>());
