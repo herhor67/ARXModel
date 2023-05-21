@@ -16,8 +16,8 @@
  - ns - wartość typu double reprezentująca amplitudę szumu */
 ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsigned dly, double ns) : k(dly), ns_var(ns)
 {
-	setNum(B);// ustawia wartości wektora B
 	setDen(A);// ustawia wartości wektora A
+	setNum(B);// ustawia wartości wektora B
 }
 
 // destruktor klasy ARX

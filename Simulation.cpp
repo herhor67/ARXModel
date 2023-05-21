@@ -39,18 +39,19 @@ Simulation::Simulation() = default;
 void Simulation::run(size_t iter)
 {
 	double arxout = 0;
-	double setp, err, ster;
+	double setp = 0, err = 0, ster = 0;
 
-	for (size_t i = 0; i < iter; ++i)
+	for (size_t i = 0; i <= iter; ++i)
 	{
 		setp = gen.get(i);
-		err = setp - arxout;
 
+		err = setp - arxout;
 		ster = pid.sim(err);
+		//ster = setp;
 
 		arxout = arx.sim(ster);
 
-		std::cout << "Setp: " << setp << "\t\tErr: " << err << "\t\tSter: " << ster << "\t\tARX: " << arxout << std::endl;
+		std::cout << "It: " << i << "\tSetp: " << setp << "\t\tErr: " << err << "\t\tSter: " << ster << "\t\tARX: " << arxout << std::endl;
 	}
 
 }

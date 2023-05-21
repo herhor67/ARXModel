@@ -2,8 +2,9 @@ close all
 clear variables
 clc
 
-n = 100;
+n = 10;
 
+st = 1;
 
 % Współczynniki wielomianów A i B
 A = [1, 0.2, -0.1, 0.15];
@@ -26,5 +27,9 @@ Kd = 0.175;
 out = sim('model.slx');
 
 figure
-plot(out.arxout)
-
+hold on
+stem(out.gen.Time, out.gen.Data)
+stem(out.err.Time, out.err.Data)
+stem(out.ster.Time, out.ster.Data)
+stem(out.arx.Time, out.arx.Data)
+legend(["gen", "err", "ster", "arx"])
