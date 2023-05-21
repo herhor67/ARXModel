@@ -9,7 +9,14 @@ PID::~PID() = default; // Destruktor klasy PID jest zdefiniowany domyślnie.
 Przyjmuje jako argument sygnał wejściowy (błąd regulacji) i zwraca sygnał wyjściowy (sygnał sterujący) */
 double PID::sim(double err)
 {
-	sumerr += err; // Akumulacja błędu regulacji
+	// Akumulacja błędu regulacji
+	// backward euler
+	sumerr += err; 
+	//forward euler
+	//sumerr += lasterr;
+	//trapezoidal
+	//sumerr += (err + lasterr) / 2;
+
 	double differr = err - lasterr; // Obliczenie różnicy błędu regulacji
 	lasterr = err; // Przypisanie bieżącego błędu regulacji jako poprzedni błąd
 
