@@ -1,11 +1,14 @@
-#include "settings.h"
+/// \file main.cpp
+/// \brief Zawiera funkcję główną programu symulacji.
+/// 
+/// Funkcja raportująca jest uruchamiana tylko w trybie debugowania.
+/// Wykonuje symulację regulatora PID z wykorzystaniem obiektów klasy ARX, PID, Generator i Simulation.
 
+#include "settings.h"
 #include "ARX.h"
 #include "PID.h"
 #include "Generator.h"
 #include "Simulation.h"
-
-
 
 #include <iomanip>
 
@@ -205,24 +208,35 @@ int main()
 
 #else
 
+/**
+ * @brief Główna funkcja programu
+ * @details Program inicjalizuje i uruchamia symulację z użyciem systemu ARX oraz kontrolera PID.
+ *
+ * Funkcja main jest punktem wejścia programu w trybie Release.
+ * Tworzy obiekty ARX, PID, Generator i Simulation, inicjalizuje je i wykonuje symulację.
+ *
+ * @return Liczba całkowita reprezentująca kod wyjścia.
+ */
 int main()
 {
 	cout << "Hello there!" << endl;
 
-	ARX arx({ /*1,*/ 0.2, -0.1, 0.15 }, { -0.5, 0.6, 0.15 }, 1, 0); // Inicjalizacja obiektu ARX
-	PID pid(1.32, 0.7, 0.175); // Inicjalizacja obiektu PID
+	ARX arx({ /*1,*/ 0.2, -0.1, 0.15 }, { -0.5, 0.6, 0.15 }, 1, 0); ///< Inicjalizacja obiektu ARX.
+	
+	PID pid(1.32, 0.7, 0.175); ///< Inicjalizacja obiektu PID .
 
-	Generator gen;
+	Generator gen; ///< Inicjalizacja obiektu Generator.
 	gen.add(1, std::make_unique<SignalConst>());
 	//gen.add(1, std::make_unique<SignalImpulse>());
 
-	Simulation sim(std::move(arx), std::move(pid), std::move(gen)); // Inicjalizacja obiektu symulacji z ARX i PID
-	//sim.save("save.json"); // Zapisanie symulacji do pliku JSON
+	/// Tworzenie obiektu Simulation przy użyciu referencji i przekazywaniu do niego utworzonych obiektów.
+	Simulation sim(std::move(arx), std::move(pid), std::move(gen)); 
+	//sim.save("save.json"); ///< Zapisanie symulacji do pliku JSON
 
-	//Simulation sim("save.json"); // Wczytanie symulacji z pliku JSON
+	//Simulation sim("save.json"); ///< Wczytanie symulacji z pliku JSON
+	
+	sim.run(10); ///< // Wywołanie metody run na obiekcie symulacji z określoną liczbą iteracji
 
-	sim.run(10); // Uruchomienie symulacji przez 10 jednostek czasu z krokiem równym 1
-
-	//system("PAUSE"); // Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
+	//system("PAUSE"); ///< Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
 }
-#endif //ndebug // Warunek kompilacji w trybie Release
+#endif //ndebug ///< Warunek kompilacji w trybie Release
