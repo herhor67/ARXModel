@@ -1,41 +1,76 @@
-#include "Simulation.h"
+/// \file Simulation.h
+/// \brief Zawiera implementację klasy Simulation. 
+/// 
+/// Klasa ta odpowiada za przeprowadzanie symulacji oraz zapisywanie parametrów symulacji do pliku w formacie JSON.
 
+#include "Simulation.h"
 #include <string>
-#include <iostream>
+#include <iostream> 
 #include <fstream>
 
-// Dołączenie biblioteki json.hpp i nadanie jej aliasu json
+/// Dołączenie biblioteki json.hpp i nadanie jej aliasu json
 #include "json.hpp"
 using json = nlohmann::json;
 
-// Definicja konstruktora z parametrami klasy Simulation, przyjmującego obiekty klasy ARX i PID
+/**
+ * @brief Konstruktor klasy Simulation.
+ *
+ * Konstruktor przyjmuje referencje do obiektów klasy ARX, PID i Generator
+ * i inicjalizuje odpowiednie pola klasy.
+ *
+ * @param a Obiekt klasy ARX.
+ * @param p Obiekt klasy PID.
+ * @param g Obiekt klasy Generator.
+ */
 Simulation::Simulation(ARX&& a, PID&& p, Generator&& g) : arx(std::move(a)), pid(std::move(p)), gen(std::move(g)) {}
 
-// Definicja konstruktora wczytującego dane z pliku
+/**
+ * @brief Konstruktor klasy Simulation.
+ *
+ * Konstruktor wczytuje parametry symulacji z pliku o podanej nazwie.
+ * Parametry ARX i PID są odczytywane z pliku w formacie JSON.
+ *
+ * @param file Nazwa pliku, z którego zostaną wczytane parametry symulacji.
+ */
 Simulation::Simulation(const std::string& file)
 {
 	try
 	{
-		std::ifstream ifs(file);
-		json j = json::parse(ifs);
+		std::ifstream ifs(file); ///< Otwarcie pliku o podanej nazwie za pomocą strumienia wejściowego.
+		json j = json::parse(ifs); ///< Parsowanie zawartości pliku jako obiekt JSON.
 
 		arx = j["ARX"];
 		pid = j["PID"];
 		//gen = j["gen"];
 
 	}
+	/// \brief Obsługa wyjątków typu std::exception.
+	/// \param e Referencja, w której jest przechowywany przechwytywany wyjątek.
 	catch (const std::exception& e)
 	{
 		std::cerr << "Nie udało się wczytać parametrów symulacji z pliku!" << std::endl;
-		std::cerr << e.what() << std::endl;
+		std::cerr << e.what() << std::endl; ///< Wypisanie komunikatu o wyjątku (informacje szczegółowe o błędzie).
 	}
-
 }
 
-// Konstruktor domyślny klasy Simulation
+/**
+ * @brief Konstruktor domyślny klasy Simulation.
+ */
 Simulation::Simulation() = default;
 
-// Metoda run klasy Simulation, wykonująca symulację o zadanej liczbie iteracji i wartości punktu zadanej
+/**
+ * @brief Metoda wykonująca symulację.
+ *
+ * Metoda run wykonuje symulację o zadanej liczbie iteracji.
+ * Dla każdej iteracji, obliczane są wartości punktu zadanej, błędu regulacji, sygnału sterującego i wyjścia obiektu ARX.
+ * Informacje dotyczące iteracji i obliczonych wartości są wypisywane na standardowe wyjście.
+ *
+ * @param iter Liczba iteracji symulacji.
+ * @param arxout Aktualna wartość wyjścia modelu ARX.
+ * @param setp Wartość zadana.
+ * @param err Błąd regulacji.
+ * @param ster Sygnał sterujący.
+ */
 void Simulation::run(size_t iter)
 {
 	double arxout = 0;
@@ -53,25 +88,28 @@ void Simulation::run(size_t iter)
 
 		std::cout << "It: " << i << "\tSetp: " << setp << "\t\tErr: " << err << "\t\tSter: " << ster << "\t\tARX: " << arxout << std::endl;
 	}
-
 }
 
-
-// Metoda save klasy Simulation, zapisująca parametry symulacji do pliku JSON o nadanej nazwie
-// Argumenty szablonu, pola A, B, k, ns_var oraz nastawy regulatora PID klasy ARX i PID będące zapisane/deserializowane do/z formatu JSON.
+/**
+ * @brief Metoda zapisująca parametry symulacji do pliku.
+ *
+ * Metoda save zapisuje parametry symulacji do pliku JSON o podanej nazwie.
+ * Parametry obiektów ARX i PID oraz argumenty szablonu, pola A, B, k, ns_varsą są zapisywane do obiektu JSON,
+ * a następnie zapisywane do pliku za pomocą strumienia wyjściowego.
+ *
+ * @param file Nazwa pliku, do którego zostaną zapisane parametry symulacji.
+ * @param j Zmienna używana do tworzenia obiektu JSON, w którym będą przechowywane parametry symulacji przed zapisem do pliku.
+ */
 void Simulation::save(const std::string& file)
 {
 	try
 	{
-		json j; // Tworzenie obiektu json
+		json j; ///< Tworzenie obiektu json
 	
-		// Zapisanie parametrów obiektów ARX i PID do obiektu json
 		j["ARX"] = arx;
 		j["PID"] = pid;
 
-		// Otwarcie pliku
-		std::ofstream out(file);
-		// Zapisanie danych w formacie JSON do pliku za pomocą strumienia wyjściowego
+		std::ofstream out(file); ///< Otwarcie pliku
 		out << j;
 	}
 	catch (const std::exception& e)
