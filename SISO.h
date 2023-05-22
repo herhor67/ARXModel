@@ -1,21 +1,28 @@
 #pragma once
 
+/// \class SISO
+/// \brief Klasa abstrakcyjna reprezentująca system jednowejściowy-jednowyjściowy (SISO).
+///
+/// Klasa SISO definiuje interfejs dla systemów SISO. System SISO to system, który posiada
+/// tylko jedno wejście i jedno wyjście.
 class SISO
 {
-	// deklaracja klasy Simulation jako przyjaciela klasy SISO
+	/// \brief Deklaracja klasy Simulation jako przyjaciela klasy SISO.
 	friend class Simulation;
 
 public:
-	// Konstruktor domyślny klasy SISO. Oznaczenie "= default" wskazuje na to,
-	// że konstruktor ten ma zostać wygenerowany automatycznie przez kompilator
+	/// \brief Konstruktor domyślny klasy SISO.
 	SISO() = default;
-	// Destruktor wirtualny klasy SISO
+
+	/// \brief Wirtualny destruktor klasy SISO.
 	virtual ~SISO() = default;
 	
-	// Wirtualna metoda iteration reprezentuje jedną iterację systemu SISO.
-	// Metoda ta przyjmuje jako argument sygnał wejściowy i zwraca sygnał wyjściowy,
-	// jest czysto wirtualna, co oznacza, że nie jest ona zdefiniowana 
-	// w tej klasie i musi zostać zaimplementowana w klasie dziedziczącej.
+	/// \brief Wirtualna metoda symulująca jedną iterację systemu SISO.
+    /// \param input Sygnał wejściowy.
+    /// \return Sygnał wyjściowy.
+	/// 
+	/// Metoda sim przyjmuje sygnał wejściowy jako argument i zwraca sygnał wyjściowy. 
+	/// Jest to czysto wirtualna metoda, co oznacza, że nie jest zdefiniowana w tej klasie 
+	/// i musi być zaimplementowana w klasie dziedziczącej.
 	virtual double sim(double) = 0;
-
 };
