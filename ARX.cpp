@@ -1,95 +1,101 @@
+/// \file ARX.h
+/// \brief Zawiera definicję klasy ARX.
+
 #include "ARX.h"
-
 #include "settings.h"
-
 #include "helpers.h"
-
 //#include <exception>
 #include <stdexcept>
 #include <random>
 
-
-/* konstruktor klasy ARX z argumentami:
- - A - wektor z danymi typu double reprezentujący mianownik
- - B - wektor z danymi typu double reprezentujący licznik
- - dly - wartość typu unsigned reprezentująca opóźnienie
- - ns - wartość typu double reprezentująca amplitudę szumu */
+/// \brief Konstruktor klasy ARX.
+/// \param A Wektor z danymi typu double reprezentujący mianownik.
+/// \param B Wektor z danymi typu double reprezentujący licznik.
+/// \param dly Wartość typu unsigned reprezentująca opóźnienie.
+/// \param ns Wartość typu double reprezentująca amplitudę szumu.
 ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsigned dly, double ns) : k(dly), ns_var(ns)
 {
-	setDen(A);// ustawia wartości wektora A
-	setNum(B);// ustawia wartości wektora B
+	setDen(A); ///< ustawia wartości wektora A
+	setNum(B); ///< ustawia wartości wektora B
 }
 
-// destruktor klasy ARX
+/// \brief Destruktor klasy ARX.
 ARX::~ARX()
 {}
 
-/* Funkcja klasy ARX wykonująca jeden krok symulacji, z argumentem:
- - in - wartość typu double reprezentująca wejście */
+/// \brief Wykonuje jeden krok symulacji.
+/// \param in Wartość typu double reprezentująca wejście.
+/// \return Wartość typu double reprezentująca wyjście.
 double ARX::sim(double in)
 {
-	// przesuwa elementy inBuf o jedno miejsce i dopisuje najnowsze wyjście
+	/// przesuwa elementy inBuf o jedno miejsce i dopisuje najnowsze wyjście
 	inBuf = inBuf.shift(-1);
 	if (inBuf.size())
-		inBuf[0] = in; // Dopisanie najnowszego wejścia na pierwszą pozycję wektora inBuf.
+		inBuf[0] = in; ///< Dopisanie najnowszego wejścia na pierwszą pozycję wektora inBuf.
 
-	/* tworzy podwektor inBuf 
-	Wektor inBuf przechowuje wartości wejściowe wraz z opóźnieniem "k"
-	 Przypisanie wartości elementów wektora inBuf o indeksach k, k+1, ..., k+B.size()-1 do zmiennej temp 
+	/**
+	* Tworzenie podwektora inBuf
+	* Wektor inBuf przechowuje wartości wejściowe wraz z opóźnieniem "k"
+	* Przypisanie wartości elementów wektora inBuf o indeksach k, k+1, ..., k+B.size()-1 do zmiennej temp
 	*/
 	DS temp = inBuf[std::slice(k, B.size(), 1)]; 
 
-	double NUMxIN = (B * temp).sum() ; // oblicza iloczyn skalarny wektorów B i temp
-	double DENxOUT = (A * outBuf).sum(); // oblicza iloczyn skalarny wektorów A i outBuf
+	double NUMxIN = (B * temp).sum() ; ///< oblicza iloczyn skalarny wektorów B i temp
+	double DENxOUT = (A * outBuf).sum(); ///< oblicza iloczyn skalarny wektorów A i outBuf
 
-	double out = NUMxIN - DENxOUT + ns_var * getNoise(); // oblicza wartość wyjścia algorytmu ARX
+	double out = NUMxIN - DENxOUT + ns_var * getNoise(); ///< oblicza wartość wyjścia algorytmu ARX
 
-	// przesuwa elementy outBuf o jedno miejsce i dopisuje najnowsze wyjście
+	/// przesuwa elementy outBuf o jedno miejsce i dopisuje najnowsze wyjście
 	outBuf = outBuf.shift(-1); 
 	if (outBuf.size())
-		outBuf[0] = out; // Dopisanie najnowszego wyjścia na pierwszą pozycję wektora outBuf.
+		outBuf[0] = out; ///< Dopisanie najnowszego wyjścia na pierwszą pozycję wektora outBuf.
 
-	return out; // zwraca wartość wyjścia
+	return out; ///< zwraca wartość wyjścia
 }
 
-
-/* Funkcja klasy ARX ustawiająca wartości tablicy B oraz zmieniająca rozmiar
-wektora inBuf na odpowiednią ilość elementów, z argumentem:
- - n - lista z danymi typu double reprezentujący licznik */
+/// \brief Funkcja ustawiająca wartości licznika (B) modelu ARX.
+///
+/// Ustawia wartości wektora B i przesuwa wartości wektora inBuf o odpowiednią ilość elementów.
+/// \param n Lista inicjalizacyjna z wartościami typu double reprezentującymi licznik (B).
 void ARX::setNum(std::initializer_list<double> n)
 {
-	B = n; // Przypisanie wartości z listy n do tablicy B.
-	inBuf.resize(B.size() + k); // zmienia rozmiar wektora inBuf
-}
-// funkcja ustawiająca wartości wektora A
-void ARX::setDen(std::initializer_list<double> d)
-{
-	A = d; // Przypisanie wartości z listy d do wektora A.
-	outBuf.resize(A.size()); // Zmiana rozmiaru wektora outBuf na rozmiar wektora A
+	B = n; ///< Przypisanie wartości z listy n do tablicy B.
+	inBuf.resize(B.size() + k); ///< zmienia rozmiar wektora inBuf
 }
 
-void ARX::setup() //Funkcję można wykorzystać do inicjalizacji różnych wartości, jeśli zajdzie taka potrzeba.
+/// \brief Funkcja ustawiająca wartości mianownika (A) modelu ARX.
+///
+/// Ustawia wartości wektora A i zmienia rozmiar wektora outBuf.
+/// \param d Lista inicjalizacyjna z wartościami typu double reprezentującymi mianownik (A).
+void ARX::setDen(std::initializer_list<double> d)
+{
+	A = d; ///< Przypisanie wartości z listy d do wektora A.
+	outBuf.resize(A.size()); ///< Zmiana rozmiaru wektora outBuf na rozmiar wektora A
+}
+
+/// \brief Funkcja pomocnicza do inicjalizacji różnych wartości modelu ARX.
+///
+/// Funkcja pomocnicza, która może być użyta do inicjalizacji różnych wartości w modelu ARX.
+void ARX::setup() 
 {
 	
 }
 
-// static S.H.I.T.
-/**
-Funkcja dodaje losowy szum do sygnału wejściowego w celu symulacji warunków pracy.
--Funkcja zwraca losową wartość z rozkładu normalnego (tzw. Gaussa) o średniej równej 0 i wariancji równej 1,
--wykorzystując generator liczb pseudolosowych typu std::mt19937, 
--Generator oraz rozkład są zainicjalizowane tylko raz,
--Wartość zwracana przez funkcję jest zawsze losowa,
--niezależność losowania zapewniona jest poprzez użycie zmiennej statycznej,
--@return double - wartość wygenerowana z dystrybucji normalnej.
-*/
+/// \brief Funkcja statyczna generująca szum.
+///
+/// Generuje i zwraca wartość szumu.
+/// \return Wygenerowana wartość szumu.
 double ARX::getNoise()
 {
 	//std::default_random_engine generator;
-	static std::mt19937 generator; // Statyczny generator liczb pseudolosowych typu std::mt19937
+
+	/// Statyczny generator liczb pseudolosowych - Mersenne Twister z "seed" pobranym z ustawień.
+	static std::mt19937 generator; 
+
 	//std::mt19937 generator(std::random_device{}());
 
-	static std::normal_distribution<double> dist; // Statyczny rozkład normalny (Gaussa).
+	/// Statyczny rozkład normalny (Gaussa). Rozkład normalny o średniej 0 i odchyleniu standardowym 1.
+	static std::normal_distribution<double> dist; 
 
-	return dist(generator); // Zwraca losową wartość z rozkładu normalnego.
+	return dist(generator); ///< Zwraca losową wartość z rozkładu normalnego, będącą wygenerowaną wartością szumu.
 }
