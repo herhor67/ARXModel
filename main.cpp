@@ -237,6 +237,6 @@ int main()
 	
 	sim.run(10); ///< // Wywołanie metody run na obiekcie symulacji z określoną liczbą iteracji
 
-	//system("PAUSE"); ///< Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
+	system("PAUSE"); ///< Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
 }
 #endif //ndebug ///< Warunek kompilacji w trybie Release
