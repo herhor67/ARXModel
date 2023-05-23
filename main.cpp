@@ -223,7 +223,7 @@ int main()
 
 	ARX arx({ /*1,*/ 0.2, -0.1, 0.15 }, { -0.5, 0.6, 0.15 }, 1, 0); ///< Inicjalizacja obiektu ARX.
 	
-	PID pid(1.32, 0.7, 0.175); ///< Inicjalizacja obiektu PID .
+	PID pid(1.32, 0.7, 0.175); ///< Inicjalizacja obiektu PID.
 
 	Generator gen; ///< Inicjalizacja obiektu Generator.
 	gen.add(1, std::make_unique<SignalConst>());
@@ -235,7 +235,7 @@ int main()
 
 	//Simulation sim("save.json"); ///< Wczytanie symulacji z pliku JSON
 	
-	sim.run(10); ///< // Wywołanie metody run na obiekcie symulacji z określoną liczbą iteracji
+	sim.run(); ///< // Wywołanie metody run na obiekcie symulacji z określoną liczbą iteracji
 
 	system("PAUSE"); ///< Oczekiwanie na wciśnięcie dowolnego klawisza przez użytkownika
 }

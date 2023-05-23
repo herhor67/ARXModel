@@ -22,7 +22,7 @@ using json = nlohmann::json;
  * @param p Obiekt klasy PID.
  * @param g Obiekt klasy Generator.
  */
-Simulation::Simulation(ARX&& a, PID&& p, Generator&& g) : arx(std::move(a)), pid(std::move(p)), gen(std::move(g)) {}
+Simulation::Simulation(ARX&& a, PID&& p, Generator&& g, size_t l) : arx(std::move(a)), pid(std::move(p)), gen(std::move(g)), len(l) {}
 
 /**
  * @brief Konstruktor klasy Simulation.
@@ -41,7 +41,8 @@ Simulation::Simulation(const std::string& file)
 
 		arx = j["ARX"];
 		pid = j["PID"];
-		//gen = j["gen"];
+		gen = j["gen"];
+		len = j["len"];
 
 	}
 	/// \brief Obsługa wyjątków typu std::exception.
@@ -56,7 +57,7 @@ Simulation::Simulation(const std::string& file)
 /**
  * @brief Konstruktor domyślny klasy Simulation.
  */
-Simulation::Simulation() = default;
+Simulation::Simulation() : len(0) {}
 
 /**
  * @brief Metoda wykonująca symulację.
@@ -71,12 +72,12 @@ Simulation::Simulation() = default;
  * @param err Błąd regulacji.
  * @param ster Sygnał sterujący.
  */
-void Simulation::run(size_t iter)
+void Simulation::run()
 {
 	double arxout = 0;
 	double setp = 0, err = 0, ster = 0;
 
-	for (size_t i = 0; i <= iter; ++i)
+	for (size_t i = 0; i <= len; ++i)
 	{
 		setp = gen.get(i);
 
@@ -108,6 +109,8 @@ void Simulation::save(const std::string& file)
 	
 		j["ARX"] = arx;
 		j["PID"] = pid;
+		j["gen"] = gen;
+		j["len"] = len;
 
 		std::ofstream out(file); ///< Otwarcie pliku
 		out << j;

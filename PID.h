@@ -42,24 +42,26 @@ public:
 	/// \return Wartość wyjściowa po zastosowaniu regulatora PID.
 	double sim(double);
 	
-	/// \brief Funkcja szablonowa generująca serializację obiektu PID do formatu JSON.
-	/// \param j Obiekt JSON, do którego będą zapisywane dane.
-	/// \param o Obiekt PID, który będzie serializowany.
-	friend void to_json(json& j, const PID& o)
-	{
-		j["P"] = o.P;
-		j["I"] = o.I;
-		j["D"] = o.D;
-	}
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(PID, P, I, D);
 
-	/// \brief Funkcja szablonowa generująca deserializację obiektu PID z formatu JSON.
-	/// \param j Obiekt JSON, z którego będą odczytywane dane.
-	/// \param o Obiekt PID, do którego będą wczytywane dane.
-	friend void from_json(const json& j, PID& o)
-	{
-		j.at("P").get_to(o.P);
-		j.at("I").get_to(o.I);
-		j.at("D").get_to(o.D);
-	}
+	///// \brief Funkcja szablonowa generująca serializację obiektu PID do formatu JSON.
+	///// \param j Obiekt JSON, do którego będą zapisywane dane.
+	///// \param o Obiekt PID, który będzie serializowany.
+	//friend void to_json(json& j, const PID& o)
+	//{
+	//	j["P"] = o.P;
+	//	j["I"] = o.I;
+	//	j["D"] = o.D;
+	//}
+
+	///// \brief Funkcja szablonowa generująca deserializację obiektu PID z formatu JSON.
+	///// \param j Obiekt JSON, z którego będą odczytywane dane.
+	///// \param o Obiekt PID, do którego będą wczytywane dane.
+	//friend void from_json(const json& j, PID& o)
+	//{
+	//	j.at("P").get_to(o.P);
+	//	j.at("I").get_to(o.I);
+	//	j.at("D").get_to(o.D);
+	//}
 
 };

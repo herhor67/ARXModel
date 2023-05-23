@@ -8,6 +8,25 @@
 
 #include <utility>
 
+
+#include "json.hpp" ///< Wczytanie biblioteki "json.hpp", która umożliwia serializację i deserializację obiektów JSON.
+using json = nlohmann::json;
+
+
+/// \enum SignalType
+/// \brief Typ wyliczeniowy reprezentujący typy sygnałów.
+enum class SignalType : uint8_t
+{
+	Virtual,
+	Const, ///< Sygnał stały.
+	Sine, ///< Sygnał sinusoidalny.
+	Square, ///< Sygnał kwadratowy.
+	Triangle, ///< Sygnał trójkątny.
+	Impulse, ///< Sygnał impulsowy.
+	Delay = -1,
+};
+
+
 /// \class Signal
 /// \brief Abstrakcyjna klasa reprezentująca sygnał.
 ///
@@ -25,6 +44,11 @@ public:
 	/// \param index Indeks sygnału.
 	/// \return Wartość sygnału dla podanego indeksu.
 	virtual double get(size_t) const = 0;
+
+	virtual SignalType type() const = 0;
+
+	friend void to_json(json&, const Signal&) {}
+	friend void from_json(const json&, Signal&) {}
 };
 
 /// \typedef SignalPtr
@@ -46,6 +70,14 @@ public:
 	{
 		return 1;
 	}
+
+	SignalType type() const override
+	{
+		return SignalType::Const;
+	}
+
+	friend void to_json(nlohmann::json& j, const SignalConst& o) {}
+	friend void from_json(const nlohmann::json& j, SignalConst& o) {}
 };
 
 /// \class SignalSine
@@ -66,6 +98,13 @@ public:
 	{
 		return std::sin(i * 2 * std::numbers::pi / T);
 	}
+
+	SignalType type() const override
+	{
+		return SignalType::Sine;
+	}
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(SignalSine, T);
 };
 
 /// \class SignalSquare
@@ -90,6 +129,13 @@ public:
 		double x = std::modf(i/T, &trash);
 		return (x < D) ? 1 : 0;
 	}
+
+	SignalType type() const override
+	{
+		return SignalType::Square;
+	}
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(SignalSquare, T, D);
 };
 
 /// \class SignalTriangle
@@ -116,6 +162,13 @@ public:
 			return (x - 1) * 4;
 		return (0.5 - x) * 4;
 	}
+
+	SignalType type() const override
+	{
+		return SignalType::Triangle;
+	}
+
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(SignalTriangle, T);
 };
 
 /// \class SignalImpulse
@@ -133,6 +186,14 @@ public:
 	{
 		return i == 0;
 	}
+
+	SignalType type() const override
+	{
+		return SignalType::Impulse;
+	}
+
+	friend void to_json(json& j, const SignalImpulse& o) {}
+	friend void from_json(const json& j, SignalImpulse& o) {}
 };
 
 /// \class SignalDelay
@@ -159,18 +220,25 @@ public:
 			return 0;
 		return S->get(i-D);
 	}
+
+	SignalType type() const override
+	{
+		return SignalType::Delay;
+	}
+
+	friend void to_json(nlohmann::json& nlohmann_json_j, const SignalDelay& nlohmann_json_t)
+	{
+		nlohmann_json_j["D"] = nlohmann_json_t.D;
+		nlohmann_json_j["S"] = nlohmann_json_t.S;
+	}
+	friend void from_json(const nlohmann::json& nlohmann_json_j, SignalDelay& nlohmann_json_t)
+	{
+		nlohmann_json_j.at("D").get_to(nlohmann_json_t.D);
+		nlohmann_json_j.at("S").get_to(nlohmann_json_t.S);
+	}
 };
 
-/// \enum SignalType
-/// \brief Typ wyliczeniowy reprezentujący typy sygnałów.
-enum class SignalType : uint8_t
-{
-	Const, ///< Sygnał stały.
-	Sine, ///< Sygnał sinusoidalny.
-	Square, ///< Sygnał kwadratowy.
-	Triangle, ///< Sygnał trójkątny.
-	Impulse, ///< Sygnał impulsowy.
-};
+
 
 /// \class Generator
 /// \brief Klasa reprezentująca generator sygnałów.
@@ -209,4 +277,33 @@ public:
 
 		return sum;
 	}
+
+	friend void to_json(json& j, const Generator& o)
+	{
+		j = json::array();
+
+		for (const auto& s : o.signals)
+		{
+			json sj = json::object();
+			sj["type"] = static_cast<uint8_t>(s.second->type());
+			sj["A"] = s.first;
+
+			to_json(sj["params"], *s.second);
+
+			j.push_back(sj);
+		}
+	}
+	friend void from_json(const json& j, Generator& o)
+	{
+		for (const auto& sj : j)
+		{
+
+			SignalType t = static_cast<SignalType>(sj["type"]);
+
+			SignalPtr s;
+
+			//o.add();
+		}
+	}
+
 };
