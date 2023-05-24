@@ -113,7 +113,7 @@ void Simulation::save(const std::string& file)
 		j["len"] = len;
 
 		std::ofstream out(file); ///< Otwarcie pliku
-		out << j;
+		out << std::setw(4) << j << std::endl;
 	}
 	catch (const std::exception& e)
 	{

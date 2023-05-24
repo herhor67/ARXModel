@@ -133,17 +133,23 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Generator.cpp" />
     <ClCompile Include="PID.cpp" />
+    <ClCompile Include="Signal.cpp" />
     <ClCompile Include="Simulation.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ARX.h" />
+    <ClInclude Include="basen.hpp" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="PID.h" />
     <ClInclude Include="settings.h" />
     <ClInclude Include="helpers.h" />
+    <ClInclude Include="Signal.h" />
     <ClInclude Include="Simulation.h" />
     <ClInclude Include="SISO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="save.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

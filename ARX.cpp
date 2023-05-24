@@ -2,8 +2,10 @@
 /// \brief Zawiera definicję klasy ARX.
 
 #include "ARX.h"
+
 #include "settings.h"
-#include "helpers.h"
+//#include "helpers.h"
+
 //#include <exception>
 #include <stdexcept>
 #include <random>
@@ -73,13 +75,6 @@ void ARX::setDen(std::initializer_list<double> d)
 	outBuf.resize(A.size()); ///< Zmiana rozmiaru wektora outBuf na rozmiar wektora A
 }
 
-/// \brief Funkcja pomocnicza do inicjalizacji różnych wartości modelu ARX.
-///
-/// Funkcja pomocnicza, która może być użyta do inicjalizacji różnych wartości w modelu ARX.
-void ARX::setup() 
-{
-	
-}
 
 /// \brief Funkcja statyczna generująca szum.
 ///
@@ -98,4 +93,30 @@ double ARX::getNoise()
 	static std::normal_distribution<double> dist; 
 
 	return dist(generator); ///< Zwraca losową wartość z rozkładu normalnego, będącą wygenerowaną wartością szumu.
+}
+
+
+/// \brief Serializacja obiektu klasy ARX do formatu JSON.
+/// \param Obiekt JSON, do którego będą zapisywane dane.
+/// \param Obiekt ARX, który będzie serializowany.
+void to_json(json& j, const ARX& o)
+{
+	j["A"] = o.A;
+	j["B"] = o.B;
+	j["k"] = o.k;
+	j["ns_var"] = o.ns_var;
+}
+
+/// \brief Deserializacja obiektu klasy ARX z formatu JSON.
+/// \param j Obiekt JSON, z którego będą odczytywane dane.
+/// \param o Obiekt ARX, do którego będą wczytywane dane.
+void from_json(const json& j, ARX& o)
+{
+	j.at("A").get_to(o.A);
+	j.at("B").get_to(o.B);
+	j.at("k").get_to(o.k);
+	j.at("ns_var").get_to(o.ns_var);
+
+	o.outBuf.resize(o.A.size());
+	o.inBuf.resize(o.B.size());
 }
