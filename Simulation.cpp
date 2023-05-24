@@ -72,8 +72,20 @@ Simulation::Simulation() : len(0) {}
  * @param err Błąd regulacji.
  * @param ster Sygnał sterujący.
  */
-void Simulation::run()
+void Simulation::run(const std::string& fout)
 {
+	bool log = false;
+	std::ofstream out;
+	if (!fout.empty())
+	{
+		out.open(fout);
+		if (out)
+		{
+			log = true;
+			out << "Iteracja,Zadana,Blad,Sterowanie,Wyjscie" << std::endl;
+		}
+	}
+
 	double arxout = 0;
 	double setp = 0, err = 0, ster = 0;
 
@@ -88,6 +100,10 @@ void Simulation::run()
 		arxout = arx.sim(ster);
 
 		std::cout << "It: " << i << "\tSetp: " << setp << "\tErr: " << err << "\tSter: " << ster << "\tARX: " << arxout << std::endl;
+
+		if (log)
+			out << i << "," << setp << "," << err << "," << ster << "," << arxout << std::endl;
+
 	}
 }
 

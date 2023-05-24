@@ -149,6 +149,7 @@
     <ClInclude Include="SISO.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="out.csv" />
     <None Include="save.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -35,7 +35,7 @@ public:
 	~Simulation() = default;
 
 	/// \brief Metoda run wykonuje symulację przez określoną liczbę iteracji dla podanego wejścia.
-	void run();
+	void run(const std::string& = "");
 
 	/// \brief Metoda save zapisuje symulację do pliku w formacie JSON. 
 	///Wykorzystywana jest biblioteka json.hpp, która umożliwia zapisywanie danych w formacie JSON.
