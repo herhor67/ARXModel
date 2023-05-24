@@ -87,7 +87,7 @@ void Simulation::run()
 
 		arxout = arx.sim(ster);
 
-		std::cout << "It: " << i << "\tSetp: " << setp << "\t\tErr: " << err << "\t\tSter: " << ster << "\t\tARX: " << arxout << std::endl;
+		std::cout << "It: " << i << "\tSetp: " << setp << "\tErr: " << err << "\tSter: " << ster << "\tARX: " << arxout << std::endl;
 	}
 }
 

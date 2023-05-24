@@ -229,9 +229,12 @@ int main()
 	Generator gen; ///< Inicjalizacja obiektu Generator.
 	gen.add(1, SignalHdl::make<SignalDelay>(2, SignalHdl::make<SignalConst>()) );
 	//gen.add(1, SignalHdl::make<SignalImpulse>() );
+	//gen.add(1, SignalHdl::make<SignalSine>(100) );
+	//gen.add(1, SignalHdl::make<SignalSquare>(100, 0.3) );
+	//gen.add(1, SignalHdl::make<SignalTriangle>(100) );
 
 	/// Tworzenie obiektu Simulation przy użyciu referencji i przekazywaniu do niego utworzonych obiektów.
-	Simulation sim(std::move(arx), std::move(pid), std::move(gen), 5); 
+	Simulation sim(std::move(arx), std::move(pid), std::move(gen), 10); 
 	
 	sim.save("save.json"); ///< Zapisanie symulacji do pliku JSON
 

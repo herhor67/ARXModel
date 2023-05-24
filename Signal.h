@@ -65,7 +65,8 @@ public:
 	template<typename T, typename... Args>
 	static SignalHdl make(Args&&... args)
 	{
-		SignalPtr sp = std::make_unique<T>(args...);
+		//SignalPtr sp = std::unique_ptr<T>(new T(std::forward<Args>(args)...));
+		SignalPtr sp = std::make_unique<T>(std::forward<Args>(args)...);
 		return SignalHdl(std::move(sp));
 	}
 };
@@ -239,7 +240,7 @@ public:
 /// \brief Klasa reprezentuj¹ca opóŸniony sygna³.
 class SignalDelay : public Signal
 {
-	size_t D; ///< OpóŸnienie sygna³u.
+	size_t D = 0; ///< OpóŸnienie sygna³u.
 	SignalHdl S; ///< WskaŸnik na obiekt sygna³u.
 
 public:
@@ -253,7 +254,7 @@ public:
 	~SignalDelay() = default;
 
 	SignalDelay(SignalDelay&&) = default;
-	//SignalDelay& operator=(SignalDelay&&) = default;
+	SignalDelay& operator=(SignalDelay&&) = default;
 
 	double get(size_t i) const override
 	{

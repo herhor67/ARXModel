@@ -118,5 +118,5 @@ void from_json(const json& j, ARX& o)
 	j.at("ns_var").get_to(o.ns_var);
 
 	o.outBuf.resize(o.A.size());
-	o.inBuf.resize(o.B.size());
+	o.inBuf.resize(o.B.size() + o.k);
 }
