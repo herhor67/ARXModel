@@ -10,11 +10,13 @@
 #include <stdexcept>
 #include <random>
 
-/// \brief Konstruktor klasy ARX.
-/// \param A Wektor z danymi typu double reprezentujący mianownik.
-/// \param B Wektor z danymi typu double reprezentujący licznik.
-/// \param dly Wartość typu unsigned reprezentująca opóźnienie.
-/// \param ns Wartość typu double reprezentująca amplitudę szumu.
+/**
+ * \brief Konstruktor klasy ARX.
+ * \param A Wektor z danymi typu double reprezentujący mianownik.
+ * \param B Wektor z danymi typu double reprezentujący licznik.
+ * \param dly Wartość typu unsigned reprezentująca opóźnienie.
+ * \param ns Wartość typu double reprezentująca amplitudę szumu.
+ */
 ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsigned dly, double ns) : k(dly), ns_var(ns)
 {
 	setDen(A); ///< ustawia wartości wektora A
@@ -25,9 +27,11 @@ ARX::ARX(std::initializer_list<double> A, std::initializer_list<double> B, unsig
 ARX::~ARX()
 {}
 
-/// \brief Wykonuje jeden krok symulacji.
-/// \param in Wartość typu double reprezentująca wejście.
-/// \return Wartość typu double reprezentująca wyjście.
+/**
+ * \brief Wykonuje jeden krok symulacji.
+ * \param in Wartość typu double reprezentująca wejście.
+ * \return Wartość typu double reprezentująca wyjście.
+ */
 double ARX::sim(double in)
 {
 	/// przesuwa elementy inBuf o jedno miejsce i dopisuje najnowsze wyjście
@@ -55,20 +59,24 @@ double ARX::sim(double in)
 	return out; ///< zwraca wartość wyjścia
 }
 
-/// \brief Funkcja ustawiająca wartości licznika (B) modelu ARX.
-///
-/// Ustawia wartości wektora B i przesuwa wartości wektora inBuf o odpowiednią ilość elementów.
-/// \param n Lista inicjalizacyjna z wartościami typu double reprezentującymi licznik (B).
+/**
+ * \brief Funkcja ustawiająca wartości licznika (B) modelu ARX.
+ *
+ * Ustawia wartości wektora B i przesuwa wartości wektora inBuf o odpowiednią ilość elementów.
+ * \param n Lista inicjalizacyjna z wartościami typu double reprezentującymi licznik (B).
+ */
 void ARX::setNum(std::initializer_list<double> n)
 {
 	B = n; ///< Przypisanie wartości z listy n do tablicy B.
 	inBuf.resize(B.size() + k); ///< zmienia rozmiar wektora inBuf
 }
 
-/// \brief Funkcja ustawiająca wartości mianownika (A) modelu ARX.
-///
-/// Ustawia wartości wektora A i zmienia rozmiar wektora outBuf.
-/// \param d Lista inicjalizacyjna z wartościami typu double reprezentującymi mianownik (A).
+/**
+ * \brief Funkcja ustawiająca wartości mianownika (A) modelu ARX.
+ *
+ * Ustawia wartości wektora A i zmienia rozmiar wektora outBuf.
+ * \param d Lista inicjalizacyjna z wartościami typu double reprezentującymi mianownik (A).
+ */
 void ARX::setDen(std::initializer_list<double> d)
 {
 	A = d; ///< Przypisanie wartości z listy d do wektora A.
@@ -76,10 +84,12 @@ void ARX::setDen(std::initializer_list<double> d)
 }
 
 
-/// \brief Funkcja statyczna generująca szum.
-///
-/// Generuje i zwraca wartość szumu.
-/// \return Wygenerowana wartość szumu.
+/**
+ * \brief Funkcja statyczna generująca szum.
+ *
+ * Generuje i zwraca wartość szumu.
+ * \return Wygenerowana wartość szumu.
+ */
 double ARX::getNoise()
 {
 	//std::default_random_engine generator;
@@ -96,9 +106,11 @@ double ARX::getNoise()
 }
 
 
-/// \brief Serializacja obiektu klasy ARX do formatu JSON.
-/// \param Obiekt JSON, do którego będą zapisywane dane.
-/// \param Obiekt ARX, który będzie serializowany.
+/**
+ * \brief Serializacja obiektu klasy ARX do formatu JSON.
+ * \param Obiekt JSON, do którego będą zapisywane dane.
+ * \param Obiekt ARX, który będzie serializowany.
+ */
 void to_json(json& j, const ARX& o)
 {
 	j["A"] = o.A;
@@ -107,9 +119,11 @@ void to_json(json& j, const ARX& o)
 	j["ns_var"] = o.ns_var;
 }
 
-/// \brief Deserializacja obiektu klasy ARX z formatu JSON.
-/// \param j Obiekt JSON, z którego będą odczytywane dane.
-/// \param o Obiekt ARX, do którego będą wczytywane dane.
+/**
+ * \brief Deserializacja obiektu klasy ARX z formatu JSON.
+ * \param j Obiekt JSON, z którego będą odczytywane dane.
+ * \param o Obiekt ARX, do którego będą wczytywane dane.
+ */ 
 void from_json(const json& j, ARX& o)
 {
 	j.at("A").get_to(o.A);
