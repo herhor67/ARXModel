@@ -25,7 +25,7 @@ PID::~PID() = default;
 /**
  * @brief Metoda wykonująca jedną iterację regulatora PID.
  *
- * Metoda iteration wykonuje jedną iterację regulatora PID.
+ * Metoda sim wykonuje jedną iterację regulatora PID.
  * Przyjmuje błąd regulacji jako argument i zwraca sygnał sterujący.
  *
  * @param err Sygnał wejściowy (błąd regulacji).
@@ -34,11 +34,11 @@ PID::~PID() = default;
 double PID::sim(double err)
 {
 	/// Akumulacja błędu regulacji
-	/// backward euler
-	sumerr += err; 
-	/// forward euler
+	/// Metoda backward Euler
+	sumerr += err;
+	/// Metoda forward Euler
 	// sumerr += lasterr;
-	// trapezoidal
+	/// Metoda trapezoidalna
 	// sumerr += (err + lasterr) / 2;
 
 	double differr = err - lasterr; ///< Obliczenie różnicy błędu regulacji
