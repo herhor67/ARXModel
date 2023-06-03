@@ -42,24 +42,24 @@ public:
 	/// \return Wartość wyjściowa po zastosowaniu regulatora PID.
 	double sim(double);
 	
-	NLOHMANN_DEFINE_TYPE_INTRUSIVE(PID, P, I, D);
+	NLOHMANN_DEFINE_TYPE_INTRUSIVE(PID, P, I, D); ///< Makro z biblioteki JSON dla serializacji/deserializacji obiektu klasy PID do formatu JSON.
 
-	///// \brief Funkcja szablonowa generująca serializację obiektu PID do formatu JSON.
+	///// \brief Serializacja obiektu klasy PID do formatu JSON.
 	///// \param j Obiekt JSON, do którego będą zapisywane dane.
 	///// \param o Obiekt PID, który będzie serializowany.
 	//friend void to_json(json& j, const PID& o)
 	//{
-	//	j["P"] = o.P;
+	//	j["P"] = o.P; ///< Zapisuje współczynnik proporcjonalny P do obiektu JSON.
 	//	j["I"] = o.I;
 	//	j["D"] = o.D;
 	//}
 
-	///// \brief Funkcja szablonowa generująca deserializację obiektu PID z formatu JSON.
+	///// \brief Deserializacja obiektu klasy PID z formatu JSON.
 	///// \param j Obiekt JSON, z którego będą odczytywane dane.
 	///// \param o Obiekt PID, do którego będą wczytywane dane.
 	//friend void from_json(const json& j, PID& o)
 	//{
-	//	j.at("P").get_to(o.P);
+	//	j.at("P").get_to(o.P); ///< Odczytuje wartość współczynnika proporcjonalnego P z obiektu JSON i przypisuje go do obiektu PID.
 	//	j.at("I").get_to(o.I);
 	//	j.at("D").get_to(o.D);
 	//}
