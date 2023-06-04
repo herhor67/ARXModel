@@ -21,6 +21,7 @@ using json = nlohmann::json;
  * @param a Obiekt klasy ARX.
  * @param p Obiekt klasy PID.
  * @param g Obiekt klasy Generator.
+ * @param l Długość symulacji.
  */
 Simulation::Simulation(ARX&& a, PID&& p, Generator&& g, size_t l) : arx(std::move(a)), pid(std::move(p)), gen(std::move(g)), len(l) {}
 
@@ -28,7 +29,7 @@ Simulation::Simulation(ARX&& a, PID&& p, Generator&& g, size_t l) : arx(std::mov
  * @brief Konstruktor klasy Simulation.
  *
  * Konstruktor wczytuje parametry symulacji z pliku o podanej nazwie.
- * Parametry ARX i PID są odczytywane z pliku w formacie JSON.
+ * Parametry ARX, PID i Generator są odczytywane z pliku w formacie JSON.
  *
  * @param file Nazwa pliku, z którego zostaną wczytane parametry symulacji.
  */
@@ -45,6 +46,7 @@ Simulation::Simulation(const std::string& file)
 		len = j["len"];
 
 	}
+
 	/// \brief Obsługa wyjątków typu std::exception.
 	/// \param e Referencja, w której jest przechowywany przechwytywany wyjątek.
 	catch (const std::exception& e)
@@ -71,6 +73,7 @@ Simulation::Simulation() : len(0) {}
  * @param setp Wartość zadana.
  * @param err Błąd regulacji.
  * @param ster Sygnał sterujący.
+ * @param fout Nazwa pliku, do którego zostaną zapisane wyniki symulacji.
  */
 void Simulation::run(const std::string& fout)
 {
@@ -111,7 +114,7 @@ void Simulation::run(const std::string& fout)
  * @brief Metoda zapisująca parametry symulacji do pliku.
  *
  * Metoda save zapisuje parametry symulacji do pliku JSON o podanej nazwie.
- * Parametry obiektów ARX i PID oraz argumenty szablonu, pola A, B, k, ns_varsą są zapisywane do obiektu JSON,
+ * Parametry obiektów ARX, PID i Generator oraz długość symulacji są zapisywane do obiektu JSON,
  * a następnie zapisywane do pliku za pomocą strumienia wyjściowego.
  *
  * @param file Nazwa pliku, do którego zostaną zapisane parametry symulacji.
