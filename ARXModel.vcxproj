@@ -138,7 +138,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ARX.h" />
-    <ClInclude Include="basen.hpp" />
     <ClInclude Include="Generator.h" />
     <ClInclude Include="json.hpp" />
     <ClInclude Include="PID.h" />

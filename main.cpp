@@ -221,15 +221,15 @@ int main()
 {
 	cout << "Hello there!" << endl;
 
-	/*/
+	//*/
 	ARX arx({ 0.2, -0.1, 0.15 }, { -0.5, 0.6, 0.15 }, 1, 0); ///< Inicjalizacja obiektu ARX.
 	
 	PID pid(1.32, 0.7, 0.175); ///< Inicjalizacja obiektu PID.
 
 	Generator gen; ///< Inicjalizacja obiektu Generator.
 	gen.add(1, SignalHdl::make<SignalDelay>(2, SignalHdl::make<SignalConst>()) );
-	//gen.add(1, SignalHdl::make<SignalImpulse>() );
-	//gen.add(1, SignalHdl::make<SignalSine>(100) );
+	gen.add(1, SignalHdl::make<SignalImpulse>() );
+	gen.add(1, SignalHdl::make<SignalSine>(100) );
 	//gen.add(1, SignalHdl::make<SignalSquare>(100, 0.3) );
 	//gen.add(1, SignalHdl::make<SignalTriangle>(100) );
 

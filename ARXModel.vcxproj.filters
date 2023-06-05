@@ -56,9 +56,6 @@
     <ClInclude Include="Generator.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="basen.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Signal.h">
       <Filter>Header Files</Filter>
     </ClInclude>
