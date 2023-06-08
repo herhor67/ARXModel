@@ -2,7 +2,7 @@ close all
 clear variables
 clc
 
-n = 100;
+n = 140;
 st = 1;
 
 % Współczynniki wielomianów A i B
@@ -39,8 +39,40 @@ out = sim('model.slx');
 
 figure
 hold on
-stem(out.gen.Time, out.gen.Data)
-stem(out.err.Time, out.err.Data)
-stem(out.ster.Time, out.ster.Data)
-stem(out.arx.Time, out.arx.Data)
-legend(["gen", "err", "ster", "arx"])
+plot(out.gen.Time, out.gen.Data, 'b-', 'LineWidth', 1.5)
+% stem(out.err.Time, out.err.Data)
+% stem(out.ster.Time, out.ster.Data)
+plot(out.arx.Time, out.arx.Data, 'r-', 'LineWidth', 1.5)
+grid on;
+% legend(["gen", "err", "ster", "arx"])
+xlabel('Iteracja');
+ylabel('ARX');
+legend('Setp', 'ARX')
+title('Wykres wartości ARX w zależności od iteracji');
+
+
+It = 0:140;
+
+% Wczytanie pliku CSV
+data = readmatrix('out.csv', 'Delimiter', ',');
+
+% Pobranie wartości pierwszych i ostatnich kolumn (Step i ARX)
+step = data(:, 2);
+arx = data(:, end);
+
+% Tworzenie wykresu
+figure
+hold on
+plot(It, step, 'b-', 'LineWidth', 1.5) % Wykres wartości Step
+plot(It, arx, 'r-', 'LineWidth', 1.5) % Wykres wartości ARX
+grid on;
+xlabel('Iteracja');
+ylabel('ARX');
+legend('Setp', 'ARX')
+title('Wykres wartości ARX w zależności od iteracji');
+
+hold off;
+
+% Porównanie wartości ARX z programu i z pliku CSV w postaci tabeli
+T = table(It', out.arx.Data, step, arx, 'VariableNames', {'Iteracja', 'ARX z programu', 'Step z pliku', 'ARX z pliku'});
+disp(T);
